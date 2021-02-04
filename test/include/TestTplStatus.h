@@ -4,17 +4,20 @@
 
 #pragma once
 
-#include <gtest/gtest.h>
-#include <iostream>
 #include <agribot_common/CanBus/tests/CanMock.h>
 #include <TplStatus/TplStatus.h>
+
+#include <gtest/gtest.h>
+#include <iostream>
+#include <memory>
 
 namespace hal_tool_test
 {
 // Fixture for testing of TplStatus class
 struct TestTplStatus : public ::testing::Test
 {
-  std::unique_ptr<TplStatus> test = std::make_unique<TplStatus>();
+  std::unique_ptr<Can> can_test = std::make_unique<Can>();
+  //std::unique_ptr<TplStatus> tpl_state_test = std::make_unique<TplStatus>(can_test);
 
   void SetUp() override
   {
