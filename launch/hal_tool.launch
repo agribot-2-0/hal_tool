@@ -1,0 +1,3 @@
+<launch>
+    <node name="hal_tpl_status_node" pkg="hal_tool" type="hal_tpl_status_node"/>
+</launch>
