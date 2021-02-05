@@ -4,14 +4,15 @@
 
 #pragma once
 
+#include <agribot_common/CanBus/ICan.h>
 #include <agribot_common/Can.h>
 #include <memory>
 
 class TplStatus
 {
  private:
-  std::unique_ptr<Can> can_handle_;
+  std::shared_ptr<ICan> can_handle_;
 
  public:
-  TplStatus(std::unique_ptr<Can> can_handle) : can_handle_(std::move(can_handle)) {}
+  TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_(std::move(can_handle)) {}
 };

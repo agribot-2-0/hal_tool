@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Agribot. All rights reserved.
+ * Copyright (C) 2021 Agribot. All rights reserved.
  */
 
 #include <gtest/gtest.h>
@@ -18,10 +18,10 @@ TEST_F(TestTplStatus, TestUno)
   ASSERT_EQ(1ul, myList.size());
 }
 
-TEST_F(TestTplStatus, TestDuo)
-{
-  ASSERT_EQ(2 + 2, 4);
-}
+// TEST_F(TestTplStatus, TestDuo)
+// {
+//   ASSERT_EQ(2 + 2, 4);
+// }
 
 int main(int argc, char** argv)
 {
