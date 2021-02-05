@@ -11,8 +11,9 @@
 class TplStatus
 {
  private:
-  std::shared_ptr<ICan> can_handle_;
+  std::unique_ptr<ICan> can_handle_;
 
  public:
   TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_(std::move(can_handle)) {}
+  
 };
