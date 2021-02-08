@@ -2,20 +2,32 @@
  * Copyright (C) 2021 Agribot. All rights reserved.
  */
 
-#pragma once
-
-#include <hal_tool/CanData/ICanData.h>
+#include <hal_tool/CanData/TplRevoluteEncoder.h>
 #include <cstdint>
 
-class TplRevoluteEncoder : public ICanData
+//Debug: 
+#include <iostream>
+
+
+void TplRevoluteEncoder::setParsedValue(const double val)
 {
- private:
-  double angle_radians_;
+  angle_radians_ = val;
+}
 
-  void setParsedValue(const double val) override;
+std::uint32_t TplRevoluteEncoder::getId() const
+{
+  return 0;
+}
 
- public:
-  std::uint32_t getId() const override;
-  void assembleValueFromFrame(const CanFrame& data) override;
-  double getAssembledValue() const override;
-};
+void TplRevoluteEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
+{
+  for (auto byte : data)
+  {
+    std::cout << byte << std::endl;
+  }
+}
+
+double TplRevoluteEncoder::getAssembledValue() const
+{
+  return 0.0;
+}

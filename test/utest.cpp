@@ -18,6 +18,7 @@ using hal_tool_test::TestTplStatus;
 TEST(testChassisEncoder, testFrameParsing)
 {
 
+  
 }
 
 TEST(testRgbPtoEncoder, testFrameParsing)
@@ -39,6 +40,8 @@ TEST(testRevoluteEncoder, testFrameParsing)
 TEST_F(TestTplStatus, TestUno)
 {
   //EXPECT_CALL(*can_test_, bReceiveFrame).WillRepeatedly(::testing::Return(true));
+  tpl_state_test_->loadCanFrames();
+  tpl_state_test_->assembleEncodersValues();
 
 }
 

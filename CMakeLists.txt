@@ -38,7 +38,7 @@ include_directories(
 
 link_directories("${PROJECT_SOURCE_DIR}")
 
-add_executable(hal_tpl_status_node src/hal_tpl_status_node.cpp src/TplStatus/TplStatus.cpp)
+add_executable(hal_tpl_status_node src/hal_tpl_status_node.cpp src/TplStatus/TplStatus.cpp src/CanData/ChassisEncoder.cpp src/CanData/FlowEncoder.cpp src/CanData/TplPrismaticEncoder.cpp src/CanData/TplRevoluteEncoder.cpp)
 target_link_libraries(hal_tpl_status_node ${agribot_common_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(hal_tpl_status_node ${catkin_EXPORTED_TARGETS})
 
@@ -66,5 +66,5 @@ include_directories(
 )
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-test test/utest.cpp src/TplStatus/TplStatus.cpp)
+catkin_add_gtest(${PROJECT_NAME}-test test/utest.cpp src/TplStatus/TplStatus.cpp src/CanData/ChassisEncoder.cpp src/CanData/FlowEncoder.cpp src/CanData/TplPrismaticEncoder.cpp src/CanData/TplRevoluteEncoder.cpp)
 target_link_libraries(${PROJECT_NAME}-test ${agribot_common_LIBRARIES} gmock gtest)

@@ -31,6 +31,7 @@ struct TestTplStatus : public ::testing::Test
 
   void TearDown() override
   {
+    std::cout << "teardown" << std::endl;
   }
 };
 }  // namespace hal_tool_test

@@ -14,6 +14,6 @@ class ICanData
  public:
   virtual ~ICanData() {}
   virtual std::uint32_t getId() const = 0;
-  virtual void assembleValueFromFrame(const CanFrame &data) = 0;
+  virtual void assembleValueFromFrame(const std::vector<uint8_t>& data) = 0;
   virtual double getAssembledValue() const = 0;
 };

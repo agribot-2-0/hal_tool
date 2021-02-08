@@ -11,11 +11,10 @@ class TplRevoluteEncoder : public ICanData
 {
  private:
   double angle_radians_;
-
   void setParsedValue(const double val) override;
 
  public:
   std::uint32_t getId() const override;
-  void assembleValueFromFrame(const CanFrame& data) override;
+  void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
   double getAssembledValue() const override;
 };
