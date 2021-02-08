@@ -9,12 +9,12 @@ void TplStatus::registerEncoder(const std::string_view& encoder_name, std::uniqu
   encoders_.insert({ encoder_name, std::move(encoder) });
 }
 
-void TplStatus::setupRgbFlowAndPto(const std::vector<uint8_t>& frame_data)
+void TplStatus::setupRgbFlowAndPto(const std::vector<uint8_t>& frame_data, std::string_view side_suffix)
 {
-  encoders_["red_flow_front"]->assembleValueFromFrame(frame_data);
-  encoders_["green_flow_front"]->assembleValueFromFrame(frame_data);
-  encoders_["blue_flow_front"]->assembleValueFromFrame(frame_data);
-  encoders_["pto_flow_front"]->assembleValueFromFrame(frame_data);
+  encoders_[static_cast<std::string_view>("red_flow") + side_suffix]->assembleValueFromFrame(frame_data);
+  encoders_["green_flow"]->assembleValueFromFrame(frame_data);
+  encoders_["blue_flow"]->assembleValueFromFrame(frame_data);
+  encoders_["pto_flow"]->assembleValueFromFrame(frame_data);
 }
 
 void TplStatus::setupEncoderValue(uint16_t frame_id, const std::vector<uint8_t>& frame_data)
@@ -22,11 +22,9 @@ void TplStatus::setupEncoderValue(uint16_t frame_id, const std::vector<uint8_t>&
   switch (frame_id)
   {
     case (encoder_can_id::chassis):
-      // registerEncoder("chassis", std::move(std::make_unique<FlowEncoder>()));
       break;
     case (encoder_can_id::flow_pto_front):
       setupRgbFlowAndPto(frame_data);
-
       break;
     case (encoder_can_id::tpl_prismatic_front):
 
