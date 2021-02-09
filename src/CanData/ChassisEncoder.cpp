@@ -20,13 +20,16 @@ std::uint32_t ChassisEncoder::getId() const
 
 void ChassisEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
+  std::cerr << "assemble method for chassis object called" << std::endl;
+  double angle = 0.0;
   for (auto byte : data)
   {
-    std::cout << byte << std::endl;
+    std::cerr << std::hex << static_cast<int>(byte) << std::endl;
   }
+  setParsedValue(angle);
 }
 
 double ChassisEncoder::getAssembledValue() const
 {
-  return 0.0;
+  return chassis_angle_radians_;
 }

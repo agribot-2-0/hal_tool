@@ -15,39 +15,55 @@
 
 using hal_tool_test::TestTplStatus;
 
-TEST(testChassisEncoder, testFrameParsing)
+CanFrame getChassisFrame(double angle, uint32_t id)
 {
-
-  
+  can_frame frame_tmp;
+  CanFrame frame;
+  frame_tmp.can_id = id;
+  frame_tmp.can_dlc = 8;
+  // frame_tmp.data[0] = angle;
+  frame.setupFrame(frame_tmp);
+  return frame;
 }
 
-TEST(testRgbPtoEncoder, testFrameParsing)
+CanFrame getPrismaticFrame(double ejection, uint32_t id)
 {
-  
+  can_frame frame_tmp;
+  CanFrame frame;
+  frame_tmp.can_id = id;
+  frame_tmp.can_dlc = 8;
+  frame_tmp.data[0] = 0x29;
+  frame_tmp.data[1] = 0x02;
+  frame.setupFrame(frame_tmp);
+  return frame;
 }
 
-TEST(testPrismaticEncoder, testFrameParsing)
+TEST_F(TestTplStatus, TestChassis)
 {
-
-}
-
-TEST(testRevoluteEncoder, testFrameParsing)
-{
-
-}
-
-
-TEST_F(TestTplStatus, TestUno)
-{
-  //EXPECT_CALL(*can_test_, bReceiveFrame).WillRepeatedly(::testing::Return(true));
+  const double encoded_angle_in_radians = 0.3;
+  // Test setup:
+  EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
+  EXPECT_CALL(*can_test_, getMostRecentCanFrame())
+      .WillOnce(::testing::Return(getChassisFrame(encoded_angle_in_radians, encoder_can_id::chassis)));
+  tpl_state_test_ = std::make_unique<TplStatus>(std::move(can_test_));
+  // Test chassis parsing:
   tpl_state_test_->loadCanFrames();
-  tpl_state_test_->assembleEncodersValues();
-
+  tpl_state_test_->parseTplEncoders();
+  ASSERT_DOUBLE_EQ(encoded_angle_in_radians, tpl_state_test_->getEncoderValue("chassis"));
 }
 
-TEST_F(TestTplStatus, TestDuo)
+TEST_F(TestTplStatus, TestPrismatic)
 {
-
+  const double encoded_ejection_in_meters = 0.1;
+  // Test setup:
+  EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
+  EXPECT_CALL(*can_test_, getMostRecentCanFrame())
+      .WillOnce(::testing::Return(getPrismaticFrame(encoded_ejection_in_meters, encoder_can_id::tpl_prismatic_front)));
+  tpl_state_test_ = std::make_unique<TplStatus>(std::move(can_test_));
+  // Test chassis parsing:
+  tpl_state_test_->loadCanFrames();
+  tpl_state_test_->parseTplEncoders();
+  ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, tpl_state_test_->getEncoderValue("chassis"));
 }
 
 int main(int argc, char** argv)

@@ -9,7 +9,7 @@
 
 class TplPrismaticEncoder : public ICanData
 {
- private:
+ private:  
   double ejection_meters_;
   void setParsedValue(const double val) override;
 
