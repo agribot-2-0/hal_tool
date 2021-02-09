@@ -16,5 +16,5 @@ class TplRevoluteEncoder : public ICanData
  public:
   std::uint32_t getId() const override;
   void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
-  double getAssembledValue() const override;
+  std::optional<double> getAssembledValue() const override;
 };

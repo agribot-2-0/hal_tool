@@ -24,11 +24,12 @@ std::uint32_t TplPrismaticEncoder::getId() const
 
 void TplPrismaticEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
+  std::cerr << "setting encoder value -  " << CanHelperFunctions::makeU16Lsbf(position_byte_location, data) << std::endl;
   setParsedValue(static_cast<double>(CanHelperFunctions::makeU16Lsbf(position_byte_location, data)) *
                  encoder_resolution_meters);
 }
 
-double TplPrismaticEncoder::getAssembledValue() const
+std::optional<double> TplPrismaticEncoder::getAssembledValue() const
 {
-  return 0.0;
+  return ejection_meters_;
 }

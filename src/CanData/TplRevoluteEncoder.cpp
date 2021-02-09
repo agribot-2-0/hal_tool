@@ -27,7 +27,7 @@ void TplRevoluteEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data
   }
 }
 
-double TplRevoluteEncoder::getAssembledValue() const
+std::optional<double> TplRevoluteEncoder::getAssembledValue() const
 {
   return 0.0;
 }

@@ -27,7 +27,7 @@ void FlowEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
   }
 }
 
-double FlowEncoder::getAssembledValue() const
+std::optional<double> FlowEncoder::getAssembledValue() const
 {
   return 0.0;
 }

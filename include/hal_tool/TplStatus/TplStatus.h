@@ -22,10 +22,10 @@ namespace encoder_can_id
 constexpr uint32_t chassis = 0xFF0119;
 constexpr uint32_t flow_pto_front = 0x01;
 constexpr uint32_t tpl_prismatic_front = 0xFFFF7F;
-constexpr uint32_t tpl_revolute_front = 0x03;
+constexpr uint32_t tpl_revolute_front = 0xFFAB7C;
 constexpr uint32_t flow_pto_back = 0x04;
 constexpr uint32_t tpl_prismatic_back = 0xFFFF7E;
-constexpr uint32_t tpl_revolute_back = 0x06;
+constexpr uint32_t tpl_revolute_back = 0xFFAB7B;
 }  // namespace encoder_can_id
 
 // encoders factory
@@ -47,5 +47,5 @@ class TplStatus
   TplStatus(std::unique_ptr<ICan> can_handle);
   void loadCanFrames();
   void parseTplEncoders();
-  double getEncoderValue(const std::string& encoder_type);  // std::optional
+  std::optional<double> getEncoderValue(const std::string& encoder_type);
 };

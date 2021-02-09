@@ -29,7 +29,7 @@ void ChassisEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
   setParsedValue(angle);
 }
 
-double ChassisEncoder::getAssembledValue() const
+std::optional<double> ChassisEncoder::getAssembledValue() const
 {
   return chassis_angle_radians_;
 }

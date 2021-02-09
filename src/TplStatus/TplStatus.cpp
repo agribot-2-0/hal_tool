@@ -105,7 +105,7 @@ void TplStatus::parseTplEncoders()
   can_frames_.clear();
 }
 
-double TplStatus::getEncoderValue(const std::string& encoder_type)
+std::optional<double> TplStatus::getEncoderValue(const std::string& encoder_type)
 {
   return encoders_[encoder_type]->getAssembledValue();
 }
