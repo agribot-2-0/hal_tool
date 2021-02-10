@@ -15,7 +15,6 @@ class TplRevoluteEncoder : public ICanData
   void setParsedValue(const double val) override;
 
  public:
-  std::uint32_t getId() const override;
   void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
   std::optional<double> getAssembledValue() const override;
 };

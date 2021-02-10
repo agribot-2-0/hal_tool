@@ -3,6 +3,7 @@
  */
 
 #include <hal_tool/CanData/FlowEncoder.h>
+#include <agribot_common/CanBus/CanHelperFunctions.h>
 #include <cstdint>
 
 // Debug:
@@ -10,23 +11,26 @@
 
 void FlowEncoder::setParsedValue(const double val)
 {
-  angle_radians_ = val;
+  valve_open_percentage_ = val;
 }
 
-std::uint32_t FlowEncoder::getId() const
+// flow_encoder enum type is also data position inside CAN frame
+uint8_t FlowEncoder::getDataBytePosition()
 {
-  return 0;
+  return static_cast<uint8_t>(encoder_type_);
+}
+
+FlowEncoder::FlowEncoder(flow_encoder selected_encoder)
+{
+  encoder_type_ = selected_encoder;
 }
 
 void FlowEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
-  for (auto byte : data)
-  {
-    std::cout << byte << std::endl;
-  }
+  setParsedValue(CanHelperFunctions::getI8(getDataBytePosition(), data));
 }
 
 std::optional<double> FlowEncoder::getAssembledValue() const
 {
-  return 0.0;
+  return valve_open_percentage_;
 }

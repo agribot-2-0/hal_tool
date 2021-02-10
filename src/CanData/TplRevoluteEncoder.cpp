@@ -3,30 +3,29 @@
  */
 
 #include <hal_tool/CanData/TplRevoluteEncoder.h>
+#include <agribot_common/CanBus/CanHelperFunctions.h>
+#include <cmath>
 #include <cstdint>
 
 // Debug:
 #include <iostream>
+
+constexpr double degrees_to_radians = M_PI / 180;
+constexpr double encoder_resolution_degrees = 0.1;
+constexpr uint8_t pitch_lsb_location = 0;
 
 void TplRevoluteEncoder::setParsedValue(const double val)
 {
   angle_radians_ = val;
 }
 
-std::uint32_t TplRevoluteEncoder::getId() const
-{
-  return 0;
-}
-
 void TplRevoluteEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
-  for (auto byte : data)
-  {
-    std::cout << byte << std::endl;
-  }
+  setParsedValue(static_cast<double>(CanHelperFunctions::getI16Lsbf(pitch_lsb_location, data)) *
+                 encoder_resolution_degrees * degrees_to_radians);
 }
 
 std::optional<double> TplRevoluteEncoder::getAssembledValue() const
 {
-  return 0.0;
+  return angle_radians_;
 }

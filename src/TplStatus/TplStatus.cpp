@@ -73,16 +73,16 @@ void TplStatus::assembleEncodersValues(uint32_t frame_id, const std::vector<uint
 TplStatus::TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_{ std::move(can_handle) }
 {
   registerEncoder("chassis", std::move(std::make_unique<ChassisEncoder>()));
-  registerEncoder("red_flow_front", std::move(std::make_unique<FlowEncoder>()));
-  registerEncoder("green_flow_front", std::move(std::make_unique<FlowEncoder>()));
-  registerEncoder("blue_flow_front", std::move(std::make_unique<FlowEncoder>()));
-  registerEncoder("pto_flow_front", std::move(std::make_unique<FlowEncoder>()));
+  registerEncoder("red_flow_front", std::move(std::make_unique<FlowEncoder>(flow_encoder::red)));
+  registerEncoder("green_flow_front", std::move(std::make_unique<FlowEncoder>(flow_encoder::green)));
+  registerEncoder("blue_flow_front", std::move(std::make_unique<FlowEncoder>(flow_encoder::blue)));
+  registerEncoder("pto_flow_front", std::move(std::make_unique<FlowEncoder>(flow_encoder::pto)));
   registerEncoder("tpl_prismatic_front", std::move(std::make_unique<TplPrismaticEncoder>()));
   registerEncoder("tpl_revolute_front", std::move(std::make_unique<TplRevoluteEncoder>()));
-  registerEncoder("red_flow_back", std::move(std::make_unique<FlowEncoder>()));
-  registerEncoder("green_flow_back", std::move(std::make_unique<FlowEncoder>()));
-  registerEncoder("blue_flow_back", std::move(std::make_unique<FlowEncoder>()));
-  registerEncoder("pto_flow_back", std::move(std::make_unique<FlowEncoder>()));
+  registerEncoder("red_flow_back", std::move(std::make_unique<FlowEncoder>(flow_encoder::red)));
+  registerEncoder("green_flow_back", std::move(std::make_unique<FlowEncoder>(flow_encoder::green)));
+  registerEncoder("blue_flow_back", std::move(std::make_unique<FlowEncoder>(flow_encoder::blue)));
+  registerEncoder("pto_flow_back", std::move(std::make_unique<FlowEncoder>(flow_encoder::pto)));
   registerEncoder("tpl_prismatic_back", std::move(std::make_unique<TplPrismaticEncoder>()));
   registerEncoder("tpl_revolute_back", std::move(std::make_unique<TplRevoluteEncoder>()));
 }

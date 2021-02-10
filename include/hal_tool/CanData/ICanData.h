@@ -15,7 +15,6 @@ class ICanData
   virtual void setParsedValue(const double val) = 0;
  public:
   virtual ~ICanData() {}
-  virtual std::uint32_t getId() const = 0;
   virtual void assembleValueFromFrame(const std::vector<uint8_t>& data) = 0;
   virtual std::optional<double> getAssembledValue() const = 0;
 };

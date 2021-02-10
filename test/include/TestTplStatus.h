@@ -13,8 +13,48 @@
 
 namespace hal_tool_test
 {
-
 constexpr char selected_can[] = "can1";
+
+CanFrame getChassisFrame(double angle, uint32_t id)
+{
+  uint32_t angle_to_send = static_cast<int32_t>(angle * 10);
+  can_frame frame_tmp;
+  CanFrame frame;
+  frame_tmp.can_id = id;
+  frame_tmp.can_dlc = 8;
+  frame_tmp.data[4] = (angle_to_send & 0x000000FF);
+  frame_tmp.data[5] = (angle_to_send & 0x0000FF00) >> 8;
+  frame_tmp.data[6] = (angle_to_send & 0x00FF0000) >> 16;
+  frame_tmp.data[7] = angle_to_send >> 24;
+  frame.setupFrame(frame_tmp);
+  return frame;
+}
+
+CanFrame getPrismaticFrame(double ejection, uint32_t id)
+{
+  can_frame frame_tmp;
+  CanFrame frame;
+  uint16_t ejection_to_send = static_cast<uint16_t>(ejection * 10000);
+  frame_tmp.can_id = id;
+  frame_tmp.can_dlc = 8;
+  frame_tmp.data[0] = ejection_to_send & 0xff;
+  frame_tmp.data[1] = ejection_to_send >> 8;
+  frame.setupFrame(frame_tmp);
+  return frame;
+}
+
+CanFrame getRevoluteFrame(double angle, uint32_t id)
+{
+  uint32_t angle_to_send = static_cast<int16_t>(angle * 10);
+  can_frame frame_tmp;
+  CanFrame frame;
+  frame_tmp.can_id = id;
+  frame_tmp.can_dlc = 8;
+  frame_tmp.data[0] = (angle_to_send & 0x00FF);
+  frame_tmp.data[1] = (angle_to_send & 0xFF00) >> 8;
+  frame.setupFrame(frame_tmp);
+  return frame;
+}
 
 // Fixture for testing of TplStatus class
 struct TestTplStatus : public ::testing::Test
