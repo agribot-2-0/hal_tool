@@ -5,6 +5,7 @@
 #pragma once
 
 #include <agribot_common/CanFrame.h>
+#include <vector>
 #include <optional>
 #include <cstdint>
 

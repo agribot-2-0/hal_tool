@@ -5,9 +5,8 @@
 #include <hal_tool/CanData/TplRevoluteEncoder.h>
 #include <cstdint>
 
-//Debug: 
+// Debug:
 #include <iostream>
-
 
 void TplRevoluteEncoder::setParsedValue(const double val)
 {

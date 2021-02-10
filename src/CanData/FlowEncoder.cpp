@@ -5,9 +5,8 @@
 #include <hal_tool/CanData/FlowEncoder.h>
 #include <cstdint>
 
-//Debug: 
+// Debug:
 #include <iostream>
-
 
 void FlowEncoder::setParsedValue(const double val)
 {

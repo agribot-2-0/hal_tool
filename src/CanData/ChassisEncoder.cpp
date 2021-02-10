@@ -5,7 +5,7 @@
 #include <hal_tool/CanData/ChassisEncoder.h>
 #include <cstdint>
 
-//Debug: 
+// Debug:
 #include <iostream>
 
 void ChassisEncoder::setParsedValue(const double val)

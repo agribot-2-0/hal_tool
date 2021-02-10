@@ -38,7 +38,7 @@ include_directories(
 
 link_directories("${PROJECT_SOURCE_DIR}")
 
-add_executable(hal_tpl_status_node src/hal_tpl_status_node.cpp src/TplStatus/TplStatus.cpp src/CanData/ChassisEncoder.cpp src/CanData/FlowEncoder.cpp src/CanData/TplPrismaticEncoder.cpp src/CanData/TplRevoluteEncoder.cpp)
+add_executable(hal_tpl_status_node src/TplStatusNode/hal_tpl_status_node.cpp src/TplStatus/TplStatus.cpp src/CanData/ChassisEncoder.cpp src/CanData/FlowEncoder.cpp src/CanData/TplPrismaticEncoder.cpp src/CanData/TplRevoluteEncoder.cpp src/TplStatusNode/TplStatusNode.cpp)
 target_link_libraries(hal_tpl_status_node ${agribot_common_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(hal_tpl_status_node ${catkin_EXPORTED_TARGETS})
 

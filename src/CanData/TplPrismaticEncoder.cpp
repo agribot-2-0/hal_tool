@@ -24,7 +24,8 @@ std::uint32_t TplPrismaticEncoder::getId() const
 
 void TplPrismaticEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
-  std::cerr << "setting encoder value -  " << CanHelperFunctions::makeU16Lsbf(position_byte_location, data) << std::endl;
+  std::cerr << "setting encoder value -  " << CanHelperFunctions::makeU16Lsbf(position_byte_location, data)
+            << std::endl;
   setParsedValue(static_cast<double>(CanHelperFunctions::makeU16Lsbf(position_byte_location, data)) *
                  encoder_resolution_meters);
 }

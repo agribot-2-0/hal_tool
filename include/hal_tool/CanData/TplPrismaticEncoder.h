@@ -5,11 +5,12 @@
 #pragma once
 
 #include <hal_tool/CanData/ICanData.h>
+#include <vector>
 #include <cstdint>
 
 class TplPrismaticEncoder : public ICanData
 {
- private:  
+ private:
   double ejection_meters_;
   void setParsedValue(const double val) override;
 

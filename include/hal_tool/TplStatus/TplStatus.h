@@ -44,7 +44,7 @@ class TplStatus
   void assembleEncodersValues(uint32_t frame_id, const std::vector<uint8_t>& frame_data);
 
  public:
-  TplStatus(std::unique_ptr<ICan> can_handle);
+  explicit TplStatus(std::unique_ptr<ICan> can_handle);
   void loadCanFrames();
   void parseTplEncoders();
   std::optional<double> getEncoderValue(const std::string& encoder_type);

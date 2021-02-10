@@ -5,6 +5,7 @@
 #pragma once
 
 #include <hal_tool/CanData/ICanData.h>
+#include <vector>
 #include <cstdint>
 
 class TplRevoluteEncoder : public ICanData

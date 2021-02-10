@@ -2,16 +2,16 @@
  * Copyright (C) 2021 Agribot. All rights reserved.
  */
 
-#include <gtest/gtest.h>
-
-#include <list>
-#include <string>
-
 #include <TestTplStatus.h>
 #include <hal_tool/CanData/ChassisEncoder.h>
 #include <hal_tool/CanData/FlowEncoder.h>
 #include <hal_tool/CanData/TplPrismaticEncoder.h>
 #include <hal_tool/CanData/TplRevoluteEncoder.h>
+
+#include <gtest/gtest.h>
+
+#include <list>
+#include <string>
 
 using hal_tool_test::TestTplStatus;
 
@@ -50,7 +50,7 @@ TEST_F(TestTplStatus, TestChassis)
   // Test chassis parsing:
   tpl_state_test_->loadCanFrames();
   tpl_state_test_->parseTplEncoders();
-  //ASSERT_DOUBLE_EQ(encoded_angle_in_radians, tpl_state_test_->getEncoderValue("chassis"));
+  // ASSERT_DOUBLE_EQ(encoded_angle_in_radians, tpl_state_test_->getEncoderValue("chassis"));
 }
 
 TEST_F(TestTplStatus, TestPrismaticFront)
@@ -64,13 +64,13 @@ TEST_F(TestTplStatus, TestPrismaticFront)
   // Test prismatic parsing:
   tpl_state_test_->loadCanFrames();
   tpl_state_test_->parseTplEncoders();
-  if(tpl_state_test_->getEncoderValue("tpl_prismatic_front"))
+  if (tpl_state_test_->getEncoderValue("tpl_prismatic_front"))
   {
     ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, *(tpl_state_test_->getEncoderValue("tpl_prismatic_front")));
   }
   else
   {
-    ASSERT_EQ(0,1);
+    ASSERT_EQ(0, 1);
   }
 }
 
@@ -85,16 +85,15 @@ TEST_F(TestTplStatus, TestPrismaticBack)
   // Test prismatic parsing:
   tpl_state_test_->loadCanFrames();
   tpl_state_test_->parseTplEncoders();
-  if(tpl_state_test_->getEncoderValue("tpl_prismatic_back"))
+  if (tpl_state_test_->getEncoderValue("tpl_prismatic_back"))
   {
     ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, *(tpl_state_test_->getEncoderValue("tpl_prismatic_back")));
   }
   else
   {
-    ASSERT_EQ(0,1);
+    ASSERT_EQ(0, 1);
   }
 }
-
 
 int main(int argc, char** argv)
 {

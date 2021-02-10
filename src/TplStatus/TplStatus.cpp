@@ -4,7 +4,7 @@
 
 #include <hal_tool/TplStatus/TplStatus.h>
 
-//DEBUG
+// DEBUG
 #include <iostream>
 
 void TplStatus::registerEncoder(const std::string& encoder_name, std::unique_ptr<ICanData> encoder)
@@ -40,31 +40,31 @@ void TplStatus::assembleEncodersValues(uint32_t frame_id, const std::vector<uint
   switch (frame_id)
   {
     case (encoder_can_id::chassis):
-      std::cerr << "chassis id detected" <<  std::endl;
+      std::cerr << "chassis id detected" << std::endl;
       assembleChassis(frame_data);
       break;
     case (encoder_can_id::flow_pto_front):
-      std::cerr << "flow_pto_front id detected" <<  std::endl;
+      std::cerr << "flow_pto_front id detected" << std::endl;
       assembleRgbFlowAndPto(frame_data, "front");
       break;
     case (encoder_can_id::tpl_prismatic_front):
-      std::cerr << "tpl_prismatic_front id detected" <<  std::endl;
+      std::cerr << "tpl_prismatic_front id detected" << std::endl;
       assembleTplPrismatic(frame_data, "front");
       break;
     case (encoder_can_id::tpl_revolute_front):
-      std::cerr << "tpl_revolute_front id detected" <<  std::endl;
+      std::cerr << "tpl_revolute_front id detected" << std::endl;
       assembleTplRevolute(frame_data, "front");
       break;
     case (encoder_can_id::flow_pto_back):
-      std::cerr << "flow_pto_back id detected" <<  std::endl;
+      std::cerr << "flow_pto_back id detected" << std::endl;
       assembleRgbFlowAndPto(frame_data, "back");
       break;
     case (encoder_can_id::tpl_prismatic_back):
-      std::cerr << "tpl_prismatic_back id detected" <<  std::endl;
+      std::cerr << "tpl_prismatic_back id detected" << std::endl;
       assembleTplPrismatic(frame_data, "back");
       break;
     case (encoder_can_id::tpl_revolute_back):
-      std::cerr << "tpl_revolute_back id detected" <<  std::endl;
+      std::cerr << "tpl_revolute_back id detected" << std::endl;
       assembleTplRevolute(frame_data, "back");
       break;
   }
