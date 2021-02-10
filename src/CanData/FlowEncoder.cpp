@@ -9,6 +9,8 @@
 // Debug:
 #include <iostream>
 
+namespace hal_tool
+{
 void FlowEncoder::setParsedValue(const double val)
 {
   valve_open_percentage_ = val;
@@ -34,3 +36,4 @@ std::optional<double> FlowEncoder::getAssembledValue() const
 {
   return valve_open_percentage_;
 }
+}  // namespace hal_tool

@@ -10,6 +10,8 @@
 // Debug:
 #include <iostream>
 
+namespace hal_tool
+{
 constexpr double degrees_to_radians = M_PI / 180;
 constexpr double encoder_resolution_degrees = 0.1;
 constexpr uint8_t pitch_lsb_location = 0;
@@ -29,3 +31,4 @@ std::optional<double> TplRevoluteEncoder::getAssembledValue() const
 {
   return angle_radians_;
 }
+}  // namespace hal_tool

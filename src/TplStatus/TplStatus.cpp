@@ -7,6 +7,8 @@
 // DEBUG
 #include <iostream>
 
+namespace hal_tool
+{
 void TplStatus::registerEncoder(const std::string& encoder_name, std::unique_ptr<ICanData> encoder)
 {
   encoders_.insert({ encoder_name, std::move(encoder) });
@@ -109,3 +111,4 @@ std::optional<double> TplStatus::getEncoderValue(const std::string& encoder_type
 {
   return encoders_[encoder_type]->getAssembledValue();
 }
+}  // namespace hal_tool

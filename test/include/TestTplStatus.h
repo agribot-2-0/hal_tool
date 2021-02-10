@@ -60,7 +60,7 @@ CanFrame getRevoluteFrame(double angle, uint32_t id)
 struct TestTplStatus : public ::testing::Test
 {
   std::unique_ptr<CanMock> can_test_;
-  std::unique_ptr<TplStatus> tpl_state_test_;
+  std::unique_ptr<hal_tool::TplStatus> tpl_state_test_;
 
   void SetUp() override
   {

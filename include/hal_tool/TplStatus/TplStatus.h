@@ -17,6 +17,8 @@
 #include <unordered_map>
 #include <string>
 
+namespace hal_tool
+{
 namespace encoder_can_id
 {
 constexpr uint32_t chassis = 0xFF0119;
@@ -49,3 +51,4 @@ class TplStatus
   void parseTplEncoders();
   std::optional<double> getEncoderValue(const std::string& encoder_type);
 };
+}  // namespace hal_tool

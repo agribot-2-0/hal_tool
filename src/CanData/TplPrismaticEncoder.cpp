@@ -9,6 +9,8 @@
 // Debug:
 #include <iostream>
 
+namespace hal_tool
+{
 constexpr double encoder_resolution_meters = 0.0001;
 constexpr uint8_t position_lsb_location = 0;
 
@@ -27,3 +29,4 @@ std::optional<double> TplPrismaticEncoder::getAssembledValue() const
 {
   return ejection_meters_;
 }
+}  // namespace hal_tool

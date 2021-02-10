@@ -8,6 +8,8 @@
 #include <vector>
 #include <cstdint>
 
+namespace hal_tool
+{
 enum class flow_encoder : uint8_t
 {
   pto = 0,
@@ -24,7 +26,8 @@ class FlowEncoder : public ICanData
   uint8_t getDataBytePosition();
 
  public:
-  FlowEncoder(flow_encoder selected_encoder);
+  explicit FlowEncoder(flow_encoder selected_encoder);
   void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
   std::optional<double> getAssembledValue() const override;
 };
+}  // namespace hal_tool

@@ -8,6 +8,8 @@
 #include <vector>
 #include <cstdint>
 
+namespace hal_tool
+{
 class TplRevoluteEncoder : public ICanData
 {
  private:
@@ -18,3 +20,4 @@ class TplRevoluteEncoder : public ICanData
   void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
   std::optional<double> getAssembledValue() const override;
 };
+}  // namespace hal_tool

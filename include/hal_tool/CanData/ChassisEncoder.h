@@ -8,6 +8,8 @@
 #include <vector>
 #include <cstdint>
 
+namespace hal_tool
+{
 class ChassisEncoder : public ICanData
 {
   double chassis_angle_radians_;
@@ -17,3 +19,4 @@ class ChassisEncoder : public ICanData
   void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
   std::optional<double> getAssembledValue() const override;
 };
+}  // namespace hal_tool
