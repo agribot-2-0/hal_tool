@@ -27,14 +27,30 @@ TEST_F(TestTplStatus, WrongHashReferenced)
       .WillOnce(::testing::Return(hal_tool_test::getChassisFrame(angle_degrees, hal_tool::encoder_can_id::chassis)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
-  // Test chassis parsing:
-  tpl_state_test_->loadCanFrames();
-  tpl_state_test_->parseTplEncoders();
+  // Test not relevant:
+  tpl_state_test_->parseTplEncodersFrames();
 
+  // Test wrong hash val:
   ASSERT_EQ(tpl_state_test_->getEncoderValue("chasis"), std::nullopt);
 }
 
-TEST_F(TestTplStatus, TestChassisFrameParser)
+TEST_F(TestTplStatus, ResetVisited)
+{
+  const double angle_degrees = -139;
+  // Test setup:
+  EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
+  EXPECT_CALL(*can_test_, getMostRecentCanFrame())
+      .WillOnce(::testing::Return(hal_tool_test::getChassisFrame(angle_degrees, hal_tool::encoder_can_id::chassis)));
+  tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
+  // Test not relevant:
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis"), std::nullopt);
+  tpl_state_test_->parseTplEncodersFrames();
+  ASSERT_NE(tpl_state_test_->getEncoderValue("chassis"), std::nullopt);
+  tpl_state_test_->resetVisitedEncodersFlag({"chassis"});
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis"), std::nullopt);
+}
+
+TEST_F(TestTplStatus, ChassisFrameParser)
 {
   const double angle_degrees = -30;
   const double angle_radians = angle_degrees * degrees_to_radians;
@@ -46,12 +62,12 @@ TEST_F(TestTplStatus, TestChassisFrameParser)
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test chassis parsing:
-  tpl_state_test_->loadCanFrames();
-  tpl_state_test_->parseTplEncoders();
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis"), std::nullopt);
+  tpl_state_test_->parseTplEncodersFrames();
   ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("chassis")));
 }
 
-TEST_F(TestTplStatus, TestPrismaticFrontFrameParser)
+TEST_F(TestTplStatus, PrismaticFrontFrameParser)
 {
   const double encoded_ejection_in_meters = 0.0553;
   // Test setup:
@@ -62,12 +78,12 @@ TEST_F(TestTplStatus, TestPrismaticFrontFrameParser)
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test prismatic parsing:
-  tpl_state_test_->loadCanFrames();
-  tpl_state_test_->parseTplEncoders();
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_prismatic_front"), std::nullopt);
+  tpl_state_test_->parseTplEncodersFrames();
   ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, *(tpl_state_test_->getEncoderValue("tpl_prismatic_front")));
 }
 
-TEST_F(TestTplStatus, TestPrismaticBackFrameParser)
+TEST_F(TestTplStatus, PrismaticBackFrameParser)
 {
   const double encoded_ejection_in_meters = -0.8827;
   // Test setup:
@@ -78,12 +94,12 @@ TEST_F(TestTplStatus, TestPrismaticBackFrameParser)
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test prismatic parsing:
-  tpl_state_test_->loadCanFrames();
-  tpl_state_test_->parseTplEncoders();
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_prismatic_back"), std::nullopt);
+  tpl_state_test_->parseTplEncodersFrames();
   ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, *(tpl_state_test_->getEncoderValue("tpl_prismatic_back")));
 }
 
-TEST_F(TestTplStatus, TestRevoluteFrontFrameParser)
+TEST_F(TestTplStatus, RevoluteFrontFrameParser)
 {
   const double angle_degrees = 12.5;
   const double angle_radians = angle_degrees * degrees_to_radians;
@@ -95,12 +111,12 @@ TEST_F(TestTplStatus, TestRevoluteFrontFrameParser)
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
-  tpl_state_test_->loadCanFrames();
-  tpl_state_test_->parseTplEncoders();
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_revolute_front"), std::nullopt);
+  tpl_state_test_->parseTplEncodersFrames();
   ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("tpl_revolute_front")));
 }
 
-TEST_F(TestTplStatus, TestRevoluteBackFrameParser)
+TEST_F(TestTplStatus, RevoluteBackFrameParser)
 {
   const double angle_degrees = -32.5;
   const double angle_radians = angle_degrees * degrees_to_radians;
@@ -112,12 +128,12 @@ TEST_F(TestTplStatus, TestRevoluteBackFrameParser)
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
-  tpl_state_test_->loadCanFrames();
-  tpl_state_test_->parseTplEncoders();
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_revolute_back"), std::nullopt);
+  tpl_state_test_->parseTplEncodersFrames();
   ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("tpl_revolute_back")));
 }
 
-TEST_F(TestTplStatus, TestRgbPtoFrontFrameParser)
+TEST_F(TestTplStatus, RgbPtoFrontFrameParser)
 {
   const int8_t red = 12;
   const int8_t green = -23;
@@ -131,15 +147,18 @@ TEST_F(TestTplStatus, TestRgbPtoFrontFrameParser)
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
-  tpl_state_test_->loadCanFrames();
-  tpl_state_test_->parseTplEncoders();
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("pto_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_flow_front"), std::nullopt);
+  tpl_state_test_->parseTplEncodersFrames();
   ASSERT_EQ(pto, *(tpl_state_test_->getEncoderValue("pto_flow_front")));
   ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_flow_front")));
   ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_flow_front")));
   ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_flow_front")));
 }
 
-TEST_F(TestTplStatus, TestRgbPtoBackFrameParser)
+TEST_F(TestTplStatus, RgbPtoBackFrameParser)
 {
   const int8_t red = -77;
   const int8_t green = 0;
@@ -153,17 +172,20 @@ TEST_F(TestTplStatus, TestRgbPtoBackFrameParser)
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
-  tpl_state_test_->loadCanFrames();
-  tpl_state_test_->parseTplEncoders();
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("pto_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_flow_back"), std::nullopt);
+  tpl_state_test_->parseTplEncodersFrames();
   ASSERT_EQ(pto, *(tpl_state_test_->getEncoderValue("pto_flow_back")));
   ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_flow_back")));
   ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_flow_back")));
   ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_flow_back")));
 }
 
-TEST_F(TestTplStatus, TestRosMessagePacketsAssembly)
+TEST_F(TestTplStatus, RosMessagePacketsAssembly)
 {
-  
+
 }
 
 int main(int argc, char** argv)

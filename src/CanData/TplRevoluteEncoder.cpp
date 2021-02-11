@@ -21,12 +21,22 @@ void TplRevoluteEncoder::setParsedValue(const double val)
 
 void TplRevoluteEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
+  parsed_at_least_once_ = true;
   setParsedValue(static_cast<double>(CanHelperFunctions::getI16Lsbf(pitch_lsb_location, data)) *
                  encoder_resolution_degrees * degrees_to_radians);
 }
 
 std::optional<double> TplRevoluteEncoder::getAssembledValue() const
 {
-  return angle_radians_;
+  if (parsed_at_least_once_)
+  {
+    return angle_radians_;
+  }
+  return std::nullopt;
+}
+
+void TplRevoluteEncoder::resetParsedFlag()
+{
+  parsed_at_least_once_ = false;
 }
 }  // namespace hal_tool

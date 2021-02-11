@@ -35,7 +35,6 @@ class TplStatus
 {
  private:
   std::unique_ptr<ICan> can_handle_;
-  std::vector<CanFrame> can_frames_;
   std::unordered_map<std::string, std::unique_ptr<ICanData>> encoders_;
 
   void assembleChassis(const std::vector<uint8_t>& frame_data);
@@ -44,11 +43,15 @@ class TplStatus
   void assembleTplRevolute(const std::vector<uint8_t>& frame_data, const std::string& suffix);
   void registerEncoder(const std::string& encoder_name, std::unique_ptr<ICanData> encoder);
   void assembleEncodersValues(uint32_t frame_id, const std::vector<uint8_t>& frame_data);
+  bool keyExists(const std::string& encoder_name);
 
  public:
   explicit TplStatus(std::unique_ptr<ICan> can_handle);
-  void loadCanFrames();
-  void parseTplEncoders();
+  void parseTplEncodersFrames();
+  // nullopt will be returned in two scenarios from getEncoderValue method
+  // 1. encoder_type key is not present on encoders_ map
+  // 2. the encoder frame was never received
   std::optional<double> getEncoderValue(const std::string& encoder_type);
+  void resetVisitedEncodersFlag(const std::vector<std::string>& encoders);
 };
 }  // namespace hal_tool

@@ -23,10 +23,20 @@ void ChassisEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
   setParsedValue(static_cast<double>(CanHelperFunctions::getI32Lsbf(pitch_lsb_location, data)) *
                  encoder_resolution_degrees * degrees_to_radians);
+  parsed_at_least_once_ = true;
 }
 
 std::optional<double> ChassisEncoder::getAssembledValue() const
 {
-  return chassis_angle_radians_;
+  if (parsed_at_least_once_)
+  {
+    return chassis_angle_radians_;
+  }
+  return std::nullopt;
+}
+
+void ChassisEncoder::resetParsedFlag()
+{
+  parsed_at_least_once_ = false;
 }
 }  // namespace hal_tool

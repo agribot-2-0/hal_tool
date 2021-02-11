@@ -65,6 +65,15 @@ void TplStatus::assembleEncodersValues(uint32_t frame_id, const std::vector<uint
   }
 }
 
+bool TplStatus::keyExists(const std::string& encoder_name)
+{
+  if (encoders_.find(encoder_name) != encoders_.end())
+  {
+    return true;
+  }
+  return false;
+}
+
 TplStatus::TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_{ std::move(can_handle) }
 {
   registerEncoder("chassis", std::move(std::make_unique<ChassisEncoder>()));
@@ -82,29 +91,33 @@ TplStatus::TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_{ std::move(
   registerEncoder("tpl_revolute_back", std::move(std::make_unique<TplRevoluteEncoder>()));
 }
 
-void TplStatus::loadCanFrames()
+void TplStatus::parseTplEncodersFrames()
 {
   while (can_handle_->bReceiveFrame())
   {
-    can_frames_.push_back(can_handle_->getMostRecentCanFrame());
-  }
-}
-
-void TplStatus::parseTplEncoders()
-{
-  for (const auto& frame : can_frames_)
-  {
+    auto frame = can_handle_->getMostRecentCanFrame();
     assembleEncodersValues(frame.getId(), frame.getData());
   }
-  can_frames_.clear();
 }
 
 std::optional<double> TplStatus::getEncoderValue(const std::string& encoder_type)
 {
-  if (encoders_.find(encoder_type) != encoders_.end())
+  if (keyExists(encoder_type))
   {
     return encoders_[encoder_type]->getAssembledValue();
   }
   return std::nullopt;
 }
+
+void TplStatus::resetVisitedEncodersFlag(const std::vector<std::string>& encoders)
+{
+  for (const auto& encoder_to_reset : encoders)
+  {
+    if (keyExists(encoder_to_reset))
+    {
+      encoders_[encoder_to_reset]->resetParsedFlag();
+    }
+  }
+}
+
 }  // namespace hal_tool

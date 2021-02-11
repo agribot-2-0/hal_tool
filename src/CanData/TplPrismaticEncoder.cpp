@@ -19,12 +19,22 @@ void TplPrismaticEncoder::setParsedValue(const double val)
 
 void TplPrismaticEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
+  parsed_at_least_once_ = true;
   setParsedValue(static_cast<double>(CanHelperFunctions::getI16Lsbf(position_lsb_location, data)) *
                  encoder_resolution_meters);
 }
 
 std::optional<double> TplPrismaticEncoder::getAssembledValue() const
 {
-  return ejection_meters_;
+  if (parsed_at_least_once_)
+  {
+    return ejection_meters_;
+  }
+  return std::nullopt;
+}
+
+void TplPrismaticEncoder::resetParsedFlag()
+{
+  parsed_at_least_once_ = false;
 }
 }  // namespace hal_tool

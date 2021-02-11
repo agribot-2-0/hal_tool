@@ -27,11 +27,21 @@ FlowEncoder::FlowEncoder(flow_encoder selected_encoder)
 
 void FlowEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
+  parsed_at_least_once_ = true;
   setParsedValue(CanHelperFunctions::getI8(getDataBytePosition(), data));
 }
 
 std::optional<double> FlowEncoder::getAssembledValue() const
 {
-  return valve_open_percentage_;
+  if (parsed_at_least_once_)
+  {
+    return valve_open_percentage_;
+  }
+  return std::nullopt;
+}
+
+void FlowEncoder::resetParsedFlag()
+{
+  parsed_at_least_once_ = false;
 }
 }  // namespace hal_tool

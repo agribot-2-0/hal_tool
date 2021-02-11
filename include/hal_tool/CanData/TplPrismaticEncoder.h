@@ -13,11 +13,13 @@ namespace hal_tool
 class TplPrismaticEncoder : public ICanData
 {
  private:
+  bool parsed_at_least_once_ = false;
   double ejection_meters_;
   void setParsedValue(const double val) override;
 
  public:
   void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
   std::optional<double> getAssembledValue() const override;
+  void resetParsedFlag() override;
 };
 }  // namespace hal_tool
