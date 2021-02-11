@@ -74,6 +74,11 @@ bool TplStatus::keyExists(const std::string& encoder_name)
   return false;
 }
 
+bool TplStatus::keyContainsSuffix(const std::string& key, const std::string& suffix)
+{
+  return key.find(suffix) != std::string::npos;
+}
+
 TplStatus::TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_{ std::move(can_handle) }
 {
   registerEncoder("chassis", std::move(std::make_unique<ChassisEncoder>()));
@@ -93,9 +98,16 @@ TplStatus::TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_{ std::move(
 
 void TplStatus::parseTplEncodersFrames()
 {
+  std::cerr << "seg1" << std::endl;
   while (can_handle_->bReceiveFrame())
   {
+    std::cerr << "seg2" << std::endl;
     auto frame = can_handle_->getMostRecentCanFrame();
+    std::cerr << "seg3" << std::endl;
+    for (const auto& byte : frame.getData())
+    {
+      std::cerr << std::hex << (int)byte << std::endl;
+    }
     assembleEncodersValues(frame.getId(), frame.getData());
   }
 }
@@ -109,15 +121,33 @@ std::optional<double> TplStatus::getEncoderValue(const std::string& encoder_type
   return std::nullopt;
 }
 
-void TplStatus::resetVisitedEncodersFlag(const std::vector<std::string>& encoders)
+void TplStatus::resetVisitedEncodersFlag(const std::string& suffix)
 {
-  for (const auto& encoder_to_reset : encoders)
+  for (const auto& [encoder_name, unused_object] : encoders_)
   {
-    if (keyExists(encoder_to_reset))
+    (void)unused_object;  // cast to void in order to supress compilator error "unused variable"
+    if (keyContainsSuffix(encoder_name, suffix))
     {
-      encoders_[encoder_to_reset]->resetParsedFlag();
+      encoders_[encoder_name]->resetParsedFlag();
     }
   }
+}
+
+bool TplStatus::dataReadyToSend(const std::string& suffix)
+{
+  // get keys containing suffix front/back
+  for (const auto& [encoder_name, encoder_object] : encoders_)
+  {
+    if (keyContainsSuffix(encoder_name, suffix))
+    {
+      std::cerr << "hash found: " << encoder_name << std::endl;
+      if (!encoder_object->getAssembledValue())
+      {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 }  // namespace hal_tool

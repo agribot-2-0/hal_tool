@@ -5,6 +5,7 @@
 #pragma once
 
 #include <agribot_common/CanBus/ICan.h>
+#include <agribot_common/Can.h>
 
 #include <hal_tool/CanData/ICanData.h>
 #include <hal_tool/CanData/ChassisEncoder.h>
@@ -30,7 +31,6 @@ constexpr uint32_t tpl_prismatic_back = 0xFFFF7E;
 constexpr uint32_t tpl_revolute_back = 0xFFAB7B;
 }  // namespace encoder_can_id
 
-// encoders factory
 class TplStatus
 {
  private:
@@ -44,6 +44,7 @@ class TplStatus
   void registerEncoder(const std::string& encoder_name, std::unique_ptr<ICanData> encoder);
   void assembleEncodersValues(uint32_t frame_id, const std::vector<uint8_t>& frame_data);
   bool keyExists(const std::string& encoder_name);
+  bool keyContainsSuffix(const std::string& key, const std::string& suffix);
 
  public:
   explicit TplStatus(std::unique_ptr<ICan> can_handle);
@@ -52,6 +53,7 @@ class TplStatus
   // 1. encoder_type key is not present on encoders_ map
   // 2. the encoder frame was never received
   std::optional<double> getEncoderValue(const std::string& encoder_type);
-  void resetVisitedEncodersFlag(const std::vector<std::string>& encoders);
+  void resetVisitedEncodersFlag(const std::string& suffix);
+  bool dataReadyToSend(const std::string& suffix);
 };
 }  // namespace hal_tool

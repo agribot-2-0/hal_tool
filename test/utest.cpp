@@ -31,7 +31,7 @@ TEST_F(TestTplStatus, WrongHashReferenced)
   tpl_state_test_->parseTplEncodersFrames();
 
   // Test wrong hash val:
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("chasis"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis_wrong_value"), std::nullopt);
 }
 
 TEST_F(TestTplStatus, ResetVisited)
@@ -181,11 +181,6 @@ TEST_F(TestTplStatus, RgbPtoBackFrameParser)
   ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_flow_back")));
   ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_flow_back")));
   ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_flow_back")));
-}
-
-TEST_F(TestTplStatus, RosMessagePacketsAssembly)
-{
-
 }
 
 int main(int argc, char** argv)

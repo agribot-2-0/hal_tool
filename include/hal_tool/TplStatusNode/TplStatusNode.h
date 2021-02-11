@@ -17,7 +17,7 @@
 class TplStatusNode
 {
  private:
-  int ros_loop_rate_ = 10;
+  int ros_loop_rate_ = 1;
   std::unique_ptr<ros::NodeHandle> node_handle_;
 
   ros::Publisher tpl_status_front_pub_;
@@ -29,5 +29,7 @@ class TplStatusNode
 
  public:
   TplStatusNode(int argc, char** argv);
+  void sendFrontStatusMsg();
+  void sendBackStatusMsg();
   void run();
 };
