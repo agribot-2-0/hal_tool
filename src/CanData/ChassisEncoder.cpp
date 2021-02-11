@@ -4,11 +4,9 @@
 
 #include <hal_tool/CanData/ChassisEncoder.h>
 #include <agribot_common/CanBus/CanHelperFunctions.h>
+
 #include <cmath>
 #include <cstdint>
-
-// Debug:
-#include <iostream>
 
 namespace hal_tool
 {
@@ -23,7 +21,6 @@ void ChassisEncoder::setParsedValue(const double val)
 
 void ChassisEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
 {
-  std::cerr << "assemble method for chassis object called" << std::endl;
   setParsedValue(static_cast<double>(CanHelperFunctions::getI32Lsbf(pitch_lsb_location, data)) *
                  encoder_resolution_degrees * degrees_to_radians);
 }

@@ -22,10 +22,10 @@ namespace hal_tool
 namespace encoder_can_id
 {
 constexpr uint32_t chassis = 0xFF0119;
-constexpr uint32_t flow_pto_front = 0x01;
+constexpr uint32_t flow_pto_front = 0xFFD464;
 constexpr uint32_t tpl_prismatic_front = 0xFFFF7F;
 constexpr uint32_t tpl_revolute_front = 0xFFAB7C;
-constexpr uint32_t flow_pto_back = 0x04;
+constexpr uint32_t flow_pto_back = 0xFFD564;
 constexpr uint32_t tpl_prismatic_back = 0xFFFF7E;
 constexpr uint32_t tpl_revolute_back = 0xFFAB7B;
 }  // namespace encoder_can_id

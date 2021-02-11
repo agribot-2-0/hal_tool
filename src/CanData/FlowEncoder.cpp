@@ -4,10 +4,8 @@
 
 #include <hal_tool/CanData/FlowEncoder.h>
 #include <agribot_common/CanBus/CanHelperFunctions.h>
-#include <cstdint>
 
-// Debug:
-#include <iostream>
+#include <cstdint>
 
 namespace hal_tool
 {

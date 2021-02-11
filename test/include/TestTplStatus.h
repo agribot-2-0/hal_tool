@@ -56,6 +56,20 @@ CanFrame getRevoluteFrame(double angle, uint32_t id)
   return frame;
 }
 
+CanFrame getRgbPtoFrame(double pto, double red, double green, double blue, uint32_t id)
+{
+  can_frame frame_tmp;
+  CanFrame frame;
+  frame_tmp.can_id = id;
+  frame_tmp.can_dlc = 8;
+  frame_tmp.data[0] = pto;
+  frame_tmp.data[1] = red;
+  frame_tmp.data[2] = green;
+  frame_tmp.data[3] = blue;
+  frame.setupFrame(frame_tmp);
+  return frame;
+}
+
 // Fixture for testing of TplStatus class
 struct TestTplStatus : public ::testing::Test
 {
@@ -64,14 +78,12 @@ struct TestTplStatus : public ::testing::Test
 
   void SetUp() override
   {
-    std::cout << "Test start" << std::endl;
     can_test_ = std::make_unique<CanMock>();
     EXPECT_CALL(*can_test_, iInitialize(selected_can)).WillRepeatedly(::testing::Return(true));
   }
 
   void TearDown() override
   {
-    std::cout << "Test stop" << std::endl;
   }
 };
 }  // namespace hal_tool_test

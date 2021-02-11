@@ -4,11 +4,9 @@
 
 #include <hal_tool/CanData/TplRevoluteEncoder.h>
 #include <agribot_common/CanBus/CanHelperFunctions.h>
+
 #include <cmath>
 #include <cstdint>
-
-// Debug:
-#include <iostream>
 
 namespace hal_tool
 {

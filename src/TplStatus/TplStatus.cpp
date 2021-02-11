@@ -42,31 +42,24 @@ void TplStatus::assembleEncodersValues(uint32_t frame_id, const std::vector<uint
   switch (frame_id)
   {
     case (encoder_can_id::chassis):
-      std::cerr << "chassis id detected" << std::endl;
       assembleChassis(frame_data);
       break;
     case (encoder_can_id::flow_pto_front):
-      std::cerr << "flow_pto_front id detected" << std::endl;
       assembleRgbFlowAndPto(frame_data, "front");
       break;
     case (encoder_can_id::tpl_prismatic_front):
-      std::cerr << "tpl_prismatic_front id detected" << std::endl;
       assembleTplPrismatic(frame_data, "front");
       break;
     case (encoder_can_id::tpl_revolute_front):
-      std::cerr << "tpl_revolute_front id detected" << std::endl;
       assembleTplRevolute(frame_data, "front");
       break;
     case (encoder_can_id::flow_pto_back):
-      std::cerr << "flow_pto_back id detected" << std::endl;
       assembleRgbFlowAndPto(frame_data, "back");
       break;
     case (encoder_can_id::tpl_prismatic_back):
-      std::cerr << "tpl_prismatic_back id detected" << std::endl;
       assembleTplPrismatic(frame_data, "back");
       break;
     case (encoder_can_id::tpl_revolute_back):
-      std::cerr << "tpl_revolute_back id detected" << std::endl;
       assembleTplRevolute(frame_data, "back");
       break;
   }
@@ -93,7 +86,6 @@ void TplStatus::loadCanFrames()
 {
   while (can_handle_->bReceiveFrame())
   {
-    std::cerr << "return true once" << std::endl;
     can_frames_.push_back(can_handle_->getMostRecentCanFrame());
   }
 }
@@ -109,6 +101,10 @@ void TplStatus::parseTplEncoders()
 
 std::optional<double> TplStatus::getEncoderValue(const std::string& encoder_type)
 {
-  return encoders_[encoder_type]->getAssembledValue();
+  if (encoders_.find(encoder_type) != encoders_.end())
+  {
+    return encoders_[encoder_type]->getAssembledValue();
+  }
+  return std::nullopt;
 }
 }  // namespace hal_tool
