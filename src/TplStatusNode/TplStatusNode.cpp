@@ -4,18 +4,28 @@
 
 #include <hal_tool/TplStatusNode/TplStatusNode.h>
 
-constexpr char selected_can[] = "can1";
-
 TplStatusNode::TplStatusNode(int argc, char** argv)
 {
+  std::string selected_can;
   ros::init(argc, argv, "hal_tpl_status_node");
   node_handle_ = std::make_unique<ros::NodeHandle>();
   tpl_status_front_pub_ = node_handle_->advertise<agribot_msgs::AgribotTool>("/agribot/encoder/tool/front", 1);
   tpl_status_back_pub_ = node_handle_->advertise<agribot_msgs::AgribotTool>("/agribot/encoder/tool/back", 1);
-
+  node_handle_->param<std::string>("/hal_tool/can_bus_name", selected_can, "can1");
   std::unique_ptr<ICan> handle = std::make_unique<Can>();
-  handle->iInitialize(selected_can);  // change to param!!!!! same for encoders ID
+
+  handle->iInitialize(selected_can.c_str());
   tpl_state_ = std::make_unique<hal_tool::TplStatus>(std::move(handle));
+}
+
+double getFrontTplAngleRelativeToChassis()
+{
+  return *(tpl_state_->getEncoderValue("tpl_revolute_front")) - *(tpl_state_->getEncoderValue("chassis"));
+}
+
+double getBackTplAngleRelativeToChassis()
+{
+  return *(tpl_state_->getEncoderValue("tpl_revolute_front")) + *(tpl_state_->getEncoderValue("chassis"));
 }
 
 void TplStatusNode::sendFrontStatusMsg()
@@ -26,7 +36,7 @@ void TplStatusNode::sendFrontStatusMsg()
   msg.green_valve_flow = *(tpl_state_->getEncoderValue("green_flow_front"));
   msg.blue_valve_flow = *(tpl_state_->getEncoderValue("blue_flow_front"));
   msg.tpl_height = *(tpl_state_->getEncoderValue("tpl_prismatic_front"));
-  msg.tpl_angle = *(tpl_state_->getEncoderValue("tpl_revolute_front"));
+  msg.tpl_angle = getFrontTplAngleRelativeToChassis();
   tpl_status_front_pub_.publish(msg);
 }
 
@@ -38,7 +48,7 @@ void TplStatusNode::sendBackStatusMsg()
   msg.green_valve_flow = *(tpl_state_->getEncoderValue("green_flow_back"));
   msg.blue_valve_flow = *(tpl_state_->getEncoderValue("blue_flow_back"));
   msg.tpl_height = *(tpl_state_->getEncoderValue("tpl_prismatic_back"));
-  msg.tpl_angle = *(tpl_state_->getEncoderValue("tpl_revolute_back"));
+  msg.tpl_angle = getBackTplAngleRelativeToChassis();
   tpl_status_front_pub_.publish(msg);
 }
 

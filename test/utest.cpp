@@ -161,7 +161,7 @@ TEST_F(TestTplStatus, RgbPtoFrontFrameParser)
 TEST_F(TestTplStatus, RgbPtoBackFrameParser)
 {
   const int8_t red = -77;
-  const int8_t green = 0;
+  const int8_t green = 28;
   const int8_t blue = 99;
   const int8_t pto = -99;
   // Test setup:

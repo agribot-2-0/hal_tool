@@ -1,3 +1,4 @@
 <launch>
+    <rosparam command="load" file="$(env AGRIBOT_HOME)/agribot/configs/hal/hal_tool/tpl_status_params.yaml"/>
     <node name="hal_tpl_status_node" pkg="hal_tool" type="hal_tpl_status_node"/>
 </launch>

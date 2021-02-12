@@ -29,6 +29,8 @@ class TplStatusNode
 
  public:
   TplStatusNode(int argc, char** argv);
+  double getFrontTplAngleRelativeToChassis();
+  double getBackTplAngleRelativeToChassis();
   void sendFrontStatusMsg();
   void sendBackStatusMsg();
   void run();

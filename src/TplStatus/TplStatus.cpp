@@ -5,9 +5,6 @@
 #include <hal_tool/TplStatus/TplStatus.h>
 #include <agribot_common/CanBus/CanHelperFunctions.h>
 
-// DEBUG
-#include <iostream>
-
 namespace hal_tool
 {
 void TplStatus::registerEncoder(const std::string& encoder_name, std::unique_ptr<ICanData> encoder)
@@ -134,7 +131,6 @@ bool TplStatus::dataReadyToSend(const std::string& suffix)
   {
     if (keyContainsSuffix(encoder_name, suffix))
     {
-      std::cerr << "hash found: " << encoder_name << std::endl;
       if (!encoder_object->getAssembledValue())
       {
         return false;
