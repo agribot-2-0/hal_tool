@@ -47,19 +47,18 @@ void TplStatusNode::run()
   ros::Rate rate(ros_loop_rate_);
   while (ros::ok())
   {
-    std::cerr << "loop" << std::endl;
     tpl_state_->parseTplEncodersFrames();
-    // if (tpl_state_->dataReadyToSend("front"))
-    // {
-    //   sendFrontStatusMsg();
-    //   tpl_state_->resetVisitedEncodersFlag("front");
-    // }
-    // if (tpl_state_->dataReadyToSend("back"))
-    // {
-    //   sendBackStatusMsg();
-    //   tpl_state_->resetVisitedEncodersFlag("back");
-    // }
-    // ros::spinOnce();
+    if (tpl_state_->dataReadyToSend("front"))
+    {
+      sendFrontStatusMsg();
+      tpl_state_->resetVisitedEncodersFlag("front");
+    }
+    if (tpl_state_->dataReadyToSend("back"))
+    {
+      sendBackStatusMsg();
+      tpl_state_->resetVisitedEncodersFlag("back");
+    }
+    ros::spinOnce();
     rate.sleep();
   }
 }

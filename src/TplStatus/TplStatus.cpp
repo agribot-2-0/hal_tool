@@ -3,6 +3,7 @@
  */
 
 #include <hal_tool/TplStatus/TplStatus.h>
+#include <agribot_common/CanBus/CanHelperFunctions.h>
 
 // DEBUG
 #include <iostream>
@@ -39,7 +40,7 @@ void TplStatus::assembleTplRevolute(const std::vector<uint8_t>& frame_data, cons
 
 void TplStatus::assembleEncodersValues(uint32_t frame_id, const std::vector<uint8_t>& frame_data)
 {
-  switch (frame_id)
+  switch (CanHelperFunctions::getNodePgnAndSa(frame_id))
   {
     case (encoder_can_id::chassis):
       assembleChassis(frame_data);
@@ -98,16 +99,9 @@ TplStatus::TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_{ std::move(
 
 void TplStatus::parseTplEncodersFrames()
 {
-  std::cerr << "seg1" << std::endl;
   while (can_handle_->bReceiveFrame())
   {
-    std::cerr << "seg2" << std::endl;
     auto frame = can_handle_->getMostRecentCanFrame();
-    std::cerr << "seg3" << std::endl;
-    for (const auto& byte : frame.getData())
-    {
-      std::cerr << std::hex << (int)byte << std::endl;
-    }
     assembleEncodersValues(frame.getId(), frame.getData());
   }
 }
