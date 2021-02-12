@@ -18,12 +18,12 @@ TplStatusNode::TplStatusNode(int argc, char** argv)
   tpl_state_ = std::make_unique<hal_tool::TplStatus>(std::move(handle));
 }
 
-double getFrontTplAngleRelativeToChassis()
+double TplStatusNode::getFrontTplAngleRelativeToChassis()
 {
   return *(tpl_state_->getEncoderValue("tpl_revolute_front")) - *(tpl_state_->getEncoderValue("chassis"));
 }
 
-double getBackTplAngleRelativeToChassis()
+double TplStatusNode::getBackTplAngleRelativeToChassis()
 {
   return *(tpl_state_->getEncoderValue("tpl_revolute_front")) + *(tpl_state_->getEncoderValue("chassis"));
 }
