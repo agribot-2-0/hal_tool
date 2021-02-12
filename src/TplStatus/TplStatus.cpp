@@ -15,12 +15,12 @@ void TplStatus::registerEncoder(const std::string& encoder_name, std::unique_ptr
   encoders_.insert({ encoder_name, std::move(encoder) });
 }
 
-void TplStatus::assembleChassis(const std::vector<uint8_t>& frame_data)
+void TplStatus::assembleChassis(const std::vector<std::uint8_t>& frame_data)
 {
   encoders_["chassis"]->assembleValueFromFrame(frame_data);
 }
 
-void TplStatus::assembleRgbFlowAndPto(const std::vector<uint8_t>& frame_data, const std::string& suffix)
+void TplStatus::assembleRgbFlowAndPto(const std::vector<std::uint8_t>& frame_data, const std::string& suffix)
 {
   encoders_["red_flow_" + suffix]->assembleValueFromFrame(frame_data);
   encoders_["green_flow_" + suffix]->assembleValueFromFrame(frame_data);
@@ -28,17 +28,17 @@ void TplStatus::assembleRgbFlowAndPto(const std::vector<uint8_t>& frame_data, co
   encoders_["pto_flow_" + suffix]->assembleValueFromFrame(frame_data);
 }
 
-void TplStatus::assembleTplPrismatic(const std::vector<uint8_t>& frame_data, const std::string& suffix)
+void TplStatus::assembleTplPrismatic(const std::vector<std::uint8_t>& frame_data, const std::string& suffix)
 {
   encoders_["tpl_prismatic_" + suffix]->assembleValueFromFrame(frame_data);
 }
 
-void TplStatus::assembleTplRevolute(const std::vector<uint8_t>& frame_data, const std::string& suffix)
+void TplStatus::assembleTplRevolute(const std::vector<std::uint8_t>& frame_data, const std::string& suffix)
 {
   encoders_["tpl_revolute_" + suffix]->assembleValueFromFrame(frame_data);
 }
 
-void TplStatus::assembleEncodersValues(uint32_t frame_id, const std::vector<uint8_t>& frame_data)
+void TplStatus::assembleEncodersValues(std::uint32_t frame_id, const std::vector<std::uint8_t>& frame_data)
 {
   switch (CanHelperFunctions::getNodePgnAndSa(frame_id))
   {

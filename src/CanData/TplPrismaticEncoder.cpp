@@ -10,14 +10,14 @@
 namespace hal_tool
 {
 constexpr double encoder_resolution_meters = 0.0001;
-constexpr uint8_t position_lsb_location = 0;
+constexpr std::uint8_t position_lsb_location = 0;
 
 void TplPrismaticEncoder::setParsedValue(const double val)
 {
   ejection_meters_ = val;
 }
 
-void TplPrismaticEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
+void TplPrismaticEncoder::assembleValueFromFrame(const std::vector<std::uint8_t>& data)
 {
   parsed_at_least_once_ = true;
   setParsedValue(static_cast<double>(CanHelperFunctions::getI16Lsbf(position_lsb_location, data)) *

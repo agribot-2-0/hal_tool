@@ -15,9 +15,9 @@ void FlowEncoder::setParsedValue(const double val)
 }
 
 // flow_encoder enum type is also data position inside CAN frame
-uint8_t FlowEncoder::getDataBytePosition()
+std::uint8_t FlowEncoder::getDataBytePosition()
 {
-  return static_cast<uint8_t>(encoder_type_);
+  return static_cast<std::uint8_t>(encoder_type_);
 }
 
 FlowEncoder::FlowEncoder(flow_encoder selected_encoder)
@@ -25,7 +25,7 @@ FlowEncoder::FlowEncoder(flow_encoder selected_encoder)
   encoder_type_ = selected_encoder;
 }
 
-void FlowEncoder::assembleValueFromFrame(const std::vector<uint8_t>& data)
+void FlowEncoder::assembleValueFromFrame(const std::vector<std::uint8_t>& data)
 {
   parsed_at_least_once_ = true;
   setParsedValue(CanHelperFunctions::getI8(getDataBytePosition(), data));
