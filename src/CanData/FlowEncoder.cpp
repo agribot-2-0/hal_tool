@@ -9,6 +9,9 @@
 
 namespace hal_tool
 {
+
+constexpr uint8_t parse_constant = 100;
+
 void FlowEncoder::setParsedValue(const double val)
 {
   valve_open_percentage_ = val;
@@ -28,7 +31,7 @@ FlowEncoder::FlowEncoder(flow_encoder selected_encoder)
 void FlowEncoder::assembleValueFromFrame(const std::vector<std::uint8_t>& data)
 {
   parsed_at_least_once_ = true;
-  setParsedValue(CanHelperFunctions::getI8(getDataBytePosition(), data));
+  setParsedValue(CanHelperFunctions::getI8(getDataBytePosition(), data) - parse_constant);
 }
 
 std::optional<double> FlowEncoder::getAssembledValue() const
