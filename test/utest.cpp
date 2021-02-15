@@ -135,10 +135,10 @@ TEST_F(TestTplStatus, RevoluteBackFrameParser)
 
 TEST_F(TestTplStatus, RgbPtoFrontFrameParser)
 {
-  const int8_t red = 12;
-  const int8_t green = -23;
-  const int8_t blue = 3;
-  const int8_t pto = -22;
+  const int16_t red = 12;
+  const int16_t green = -23;
+  const int16_t blue = 3;
+  const int16_t pto = -22;
   // Test setup:
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
@@ -160,10 +160,10 @@ TEST_F(TestTplStatus, RgbPtoFrontFrameParser)
 
 TEST_F(TestTplStatus, RgbPtoBackFrameParser)
 {
-  const int8_t red = -77;
-  const int8_t green = 28;
-  const int8_t blue = 99;
-  const int8_t pto = -99;
+  const int16_t red = -99;
+  const int16_t green = -13;
+  const int16_t blue = 28;
+  const int16_t pto = 70;
   // Test setup:
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())

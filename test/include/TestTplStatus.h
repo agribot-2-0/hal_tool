@@ -58,14 +58,15 @@ CanFrame getRevoluteFrame(double angle, uint32_t id)
 
 CanFrame getRgbPtoFrame(double pto, double red, double green, double blue, uint32_t id)
 {
+  const uint8_t parse_constant = 110;
   can_frame frame_tmp;
   CanFrame frame;
   frame_tmp.can_id = id;
   frame_tmp.can_dlc = 8;
-  frame_tmp.data[0] = pto;
-  frame_tmp.data[1] = red;
-  frame_tmp.data[2] = green;
-  frame_tmp.data[3] = blue;
+  frame_tmp.data[0] = (pto + parse_constant);
+  frame_tmp.data[1] = (red + parse_constant);
+  frame_tmp.data[2] = (green + parse_constant);
+  frame_tmp.data[3] = (blue + parse_constant);
   frame.setupFrame(frame_tmp);
   return frame;
 }
