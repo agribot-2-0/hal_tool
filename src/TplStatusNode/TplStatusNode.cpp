@@ -25,7 +25,7 @@ double TplStatusNode::getFrontTplAngleRelativeToChassis()
 
 double TplStatusNode::getBackTplAngleRelativeToChassis()
 {
-  return *(tpl_state_->getEncoderValue("tpl_revolute_front")) + *(tpl_state_->getEncoderValue("chassis"));
+  return *(tpl_state_->getEncoderValue("tpl_revolute_back")) + *(tpl_state_->getEncoderValue("chassis"));
 }
 
 void TplStatusNode::sendFrontStatusMsg()
@@ -49,7 +49,7 @@ void TplStatusNode::sendBackStatusMsg()
   msg.blue_valve_flow = *(tpl_state_->getEncoderValue("blue_flow_back"));
   msg.tpl_height = *(tpl_state_->getEncoderValue("tpl_prismatic_back"));
   msg.tpl_angle = getBackTplAngleRelativeToChassis();
-  tpl_status_front_pub_.publish(msg);
+  tpl_status_back_pub_.publish(msg);
 }
 
 void TplStatusNode::run()
