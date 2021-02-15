@@ -28,7 +28,7 @@ constexpr uint32_t tpl_prismatic_front = 0xFFFF7F;
 constexpr uint32_t tpl_revolute_front = 0xFFAB7C;
 constexpr uint32_t flow_pto_back = 0xFFD564;
 constexpr uint32_t tpl_prismatic_back = 0xFFFF7E;
-constexpr uint32_t tpl_revolute_back = 0xFFAB7B;
+constexpr uint32_t tpl_revolute_back = 0xFFAB7D;
 }  // namespace encoder_can_id
 
 class TplStatus

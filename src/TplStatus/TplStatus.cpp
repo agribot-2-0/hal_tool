@@ -131,7 +131,6 @@ bool TplStatus::dataReadyToSend(const std::string& suffix)
   {
     if (keyContainsSuffix(encoder_name, suffix))
     {
-      std::cerr << encoder_name << std::endl;
       if (!encoder_object->getAssembledValue())
       {
         return false;
