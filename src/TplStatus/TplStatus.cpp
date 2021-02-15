@@ -7,65 +7,65 @@
 
 namespace hal_tool
 {
-void TplStatus::registerEncoder(const std::string& encoder_name, std::unique_ptr<ICanData> encoder)
+void TplStatus::registerTplCanData(const std::string& encoder_name, std::unique_ptr<ICanReceivedData<double>> encoder)
 {
-  encoders_.insert({ encoder_name, std::move(encoder) });
+  tpl_can_data_.insert({ encoder_name, std::move(encoder) });
 }
 
-void TplStatus::assembleChassis(const std::vector<std::uint8_t>& frame_data)
+void TplStatus::assembleChassisInclination(const CanFrame& can_frame)
 {
-  encoders_["chassis"]->assembleValueFromFrame(frame_data);
+  tpl_can_data_["chassis_inclination"]->assembleValueFromFrame(can_frame);
 }
 
-void TplStatus::assembleRgbFlowAndPto(const std::vector<std::uint8_t>& frame_data, const std::string& suffix)
+void TplStatus::assemblePtoAndQfcFlow(const CanFrame& can_frame, const std::string& suffix)
 {
-  encoders_["red_flow_" + suffix]->assembleValueFromFrame(frame_data);
-  encoders_["green_flow_" + suffix]->assembleValueFromFrame(frame_data);
-  encoders_["blue_flow_" + suffix]->assembleValueFromFrame(frame_data);
-  encoders_["pto_flow_" + suffix]->assembleValueFromFrame(frame_data);
+  tpl_can_data_["red_qfc_flow_" + suffix]->assembleValueFromFrame(can_frame);
+  tpl_can_data_["green_qfc_flow_" + suffix]->assembleValueFromFrame(can_frame);
+  tpl_can_data_["blue_qfc_flow_" + suffix]->assembleValueFromFrame(can_frame);
+  tpl_can_data_["pto_flow_" + suffix]->assembleValueFromFrame(can_frame);
 }
 
-void TplStatus::assembleTplPrismatic(const std::vector<std::uint8_t>& frame_data, const std::string& suffix)
+void TplStatus::assembleTplExtension(const CanFrame& can_frame, const std::string& suffix)
 {
-  encoders_["tpl_prismatic_" + suffix]->assembleValueFromFrame(frame_data);
+  tpl_can_data_["tpl_extension_" + suffix]->assembleValueFromFrame(can_frame);
 }
 
-void TplStatus::assembleTplRevolute(const std::vector<std::uint8_t>& frame_data, const std::string& suffix)
+void TplStatus::assembleTplAngle(const CanFrame& can_frame, const std::string& suffix)
 {
-  encoders_["tpl_revolute_" + suffix]->assembleValueFromFrame(frame_data);
+  tpl_can_data_["tpl_angle_" + suffix]->assembleValueFromFrame(can_frame);
 }
 
-void TplStatus::assembleEncodersValues(std::uint32_t frame_id, const std::vector<std::uint8_t>& frame_data)
+void TplStatus::assembleEncodersValues(const CanFrame& can_frame)
 {
-  switch (CanHelperFunctions::getNodePgnAndSa(frame_id))
+  switch (CanHelperFunctions::getNodePgnAndSa(can_frame.getId()))
   {
-    case (encoder_can_id::chassis):
-      assembleChassis(frame_data);
+    case (tpl_sensors_can_id::chassis_inclinometer):
+      assembleChassisInclination(can_frame);
       break;
-    case (encoder_can_id::flow_pto_front):
-      assembleRgbFlowAndPto(frame_data, "front");
+    case (tpl_sensors_can_id::pto_and_qfc_flow_front):
+      assemblePtoAndQfcFlow(can_frame, "front");
       break;
-    case (encoder_can_id::tpl_prismatic_front):
-      assembleTplPrismatic(frame_data, "front");
+    case (tpl_sensors_can_id::tpl_prismatic_encoder_front):
+      assembleTplExtension(can_frame, "front");
       break;
-    case (encoder_can_id::tpl_revolute_front):
-      assembleTplRevolute(frame_data, "front");
+    case (tpl_sensors_can_id::tpl_inclinometer_front):
+      assembleTplAngle(can_frame, "front");
       break;
-    case (encoder_can_id::flow_pto_back):
-      assembleRgbFlowAndPto(frame_data, "back");
+    case (tpl_sensors_can_id::pto_and_qfc_flow_back):
+      assemblePtoAndQfcFlow(can_frame, "back");
       break;
-    case (encoder_can_id::tpl_prismatic_back):
-      assembleTplPrismatic(frame_data, "back");
+    case (tpl_sensors_can_id::tpl_prismatic_encoder_back):
+      assembleTplExtension(can_frame, "back");
       break;
-    case (encoder_can_id::tpl_revolute_back):
-      assembleTplRevolute(frame_data, "back");
+    case (tpl_sensors_can_id::tpl_inclinometer_back):
+      assembleTplAngle(can_frame, "back");
       break;
   }
 }
 
 bool TplStatus::keyExists(const std::string& encoder_name)
 {
-  if (encoders_.find(encoder_name) != encoders_.end())
+  if (tpl_can_data_.find(encoder_name) != tpl_can_data_.end())
   {
     return true;
   }
@@ -77,29 +77,28 @@ bool TplStatus::keyContainsSuffix(const std::string& key, const std::string& suf
   return key.find(suffix) != std::string::npos;
 }
 
-TplStatus::TplStatus(std::unique_ptr<ICan> can_handle) : can_handle_{ std::move(can_handle) }
+TplStatus::TplStatus(std::unique_ptr<ICan> can_handle) : can_handler_{ std::move(can_handle) }
 {
-  registerEncoder("chassis", std::move(std::make_unique<ChassisEncoder>()));
-  registerEncoder("red_flow_front", std::move(std::make_unique<FlowEncoder>(flow_encoder::red)));
-  registerEncoder("green_flow_front", std::move(std::make_unique<FlowEncoder>(flow_encoder::green)));
-  registerEncoder("blue_flow_front", std::move(std::make_unique<FlowEncoder>(flow_encoder::blue)));
-  registerEncoder("pto_flow_front", std::move(std::make_unique<FlowEncoder>(flow_encoder::pto)));
-  registerEncoder("tpl_prismatic_front", std::move(std::make_unique<TplPrismaticEncoder>()));
-  registerEncoder("tpl_revolute_front", std::move(std::make_unique<TplRevoluteEncoder>()));
-  registerEncoder("red_flow_back", std::move(std::make_unique<FlowEncoder>(flow_encoder::red)));
-  registerEncoder("green_flow_back", std::move(std::make_unique<FlowEncoder>(flow_encoder::green)));
-  registerEncoder("blue_flow_back", std::move(std::make_unique<FlowEncoder>(flow_encoder::blue)));
-  registerEncoder("pto_flow_back", std::move(std::make_unique<FlowEncoder>(flow_encoder::pto)));
-  registerEncoder("tpl_prismatic_back", std::move(std::make_unique<TplPrismaticEncoder>()));
-  registerEncoder("tpl_revolute_back", std::move(std::make_unique<TplRevoluteEncoder>()));
+  registerTplCanData("chassis_inclination", std::move(std::make_unique<ChassisInclination>()));
+  registerTplCanData("red_qfc_flow_front", std::move(std::make_unique<QfcFlow>(QfcFlowType::red_qcf)));
+  registerTplCanData("green_qfc_flow_front", std::move(std::make_unique<QfcFlow>(QfcFlowType::green_qcf)));
+  registerTplCanData("blue_qfc_flow_front", std::move(std::make_unique<QfcFlow>(QfcFlowType::blue_qcf)));
+  registerTplCanData("pto_flow_front", std::move(std::make_unique<QfcFlow>(QfcFlowType::pto)));
+  registerTplCanData("tpl_extension_front", std::move(std::make_unique<TplExtension>()));
+  registerTplCanData("tpl_angle_front", std::move(std::make_unique<TplAngle>()));
+  registerTplCanData("red_qfc_flow_back", std::move(std::make_unique<QfcFlow>(QfcFlowType::red_qcf)));
+  registerTplCanData("green_qfc_flow_back", std::move(std::make_unique<QfcFlow>(QfcFlowType::green_qcf)));
+  registerTplCanData("blue_qfc_flow_back", std::move(std::make_unique<QfcFlow>(QfcFlowType::blue_qcf)));
+  registerTplCanData("pto_flow_back", std::move(std::make_unique<QfcFlow>(QfcFlowType::pto)));
+  registerTplCanData("tpl_extension_back", std::move(std::make_unique<TplExtension>()));
+  registerTplCanData("tpl_angle_back", std::move(std::make_unique<TplAngle>()));
 }
 
 void TplStatus::parseTplEncodersFrames()
 {
-  while (can_handle_->bReceiveFrame())
+  while (can_handler_->bReceiveFrame())
   {
-    auto frame = can_handle_->getMostRecentCanFrame();
-    assembleEncodersValues(frame.getId(), frame.getData());
+    assembleEncodersValues(can_handler_->getMostRecentCanFrame());
   }
 }
 
@@ -107,19 +106,19 @@ std::optional<double> TplStatus::getEncoderValue(const std::string& encoder_type
 {
   if (keyExists(encoder_type))
   {
-    return encoders_[encoder_type]->getAssembledValue();
+    return tpl_can_data_[encoder_type]->getAssembledValue();
   }
   return std::nullopt;
 }
 
 void TplStatus::resetVisitedEncodersFlag(const std::string& suffix)
 {
-  for (const auto& [encoder_name, unused_object] : encoders_)
+  for (const auto& [encoder_name, unused_object] : tpl_can_data_)
   {
     (void)unused_object;  // cast to void in order to supress compilator error "unused variable"
     if (keyContainsSuffix(encoder_name, suffix))
     {
-      encoders_[encoder_name]->resetParsedFlag();
+      tpl_can_data_[encoder_name]->resetParsedFlag();
     }
   }
 }
@@ -127,7 +126,7 @@ void TplStatus::resetVisitedEncodersFlag(const std::string& suffix)
 bool TplStatus::dataReadyToSend(const std::string& suffix)
 {
   // get keys containing suffix front/back
-  for (const auto& [encoder_name, encoder_object] : encoders_)
+  for (const auto& [encoder_name, encoder_object] : tpl_can_data_)
   {
     if (keyContainsSuffix(encoder_name, suffix))
     {

@@ -3,10 +3,10 @@
  */
 
 #include <TestTplStatus.h>
-#include <hal_tool/CanData/ChassisEncoder.h>
-#include <hal_tool/CanData/FlowEncoder.h>
-#include <hal_tool/CanData/TplPrismaticEncoder.h>
-#include <hal_tool/CanData/TplRevoluteEncoder.h>
+#include <hal_tool/CanData/ChassisInclination.h>
+#include <hal_tool/CanData/QfcFlow.h>
+#include <hal_tool/CanData/TplExtension.h>
+#include <hal_tool/CanData/TplAngle.h>
 
 #include <gtest/gtest.h>
 
@@ -24,7 +24,8 @@ TEST_F(TestTplStatus, WrongHashReferenced)
   // Test setup:
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
-      .WillOnce(::testing::Return(hal_tool_test::getChassisFrame(angle_degrees, hal_tool::encoder_can_id::chassis)));
+      .WillOnce(::testing::Return(
+          hal_tool_test::getChassisFrame(angle_degrees, hal_tool::tpl_sensors_can_id::chassis_inclinometer)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test not relevant:
@@ -40,14 +41,15 @@ TEST_F(TestTplStatus, ResetVisited)
   // Test setup:
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
-      .WillOnce(::testing::Return(hal_tool_test::getChassisFrame(angle_degrees, hal_tool::encoder_can_id::chassis)));
+      .WillOnce(::testing::Return(
+          hal_tool_test::getChassisFrame(angle_degrees, hal_tool::tpl_sensors_can_id::chassis_inclinometer)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
   // Test not relevant:
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis_inclination"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
-  ASSERT_NE(tpl_state_test_->getEncoderValue("chassis"), std::nullopt);
-  tpl_state_test_->resetVisitedEncodersFlag({"chassis"});
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis"), std::nullopt);
+  ASSERT_NE(tpl_state_test_->getEncoderValue("chassis_inclination"), std::nullopt);
+  tpl_state_test_->resetVisitedEncodersFlag({ "chassis_inclination" });
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis_inclination"), std::nullopt);
 }
 
 TEST_F(TestTplStatus, ChassisFrameParser)
@@ -58,13 +60,14 @@ TEST_F(TestTplStatus, ChassisFrameParser)
   // Test setup:
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
-      .WillOnce(::testing::Return(hal_tool_test::getChassisFrame(angle_degrees, hal_tool::encoder_can_id::chassis)));
+      .WillOnce(::testing::Return(
+          hal_tool_test::getChassisFrame(angle_degrees, hal_tool::tpl_sensors_can_id::chassis_inclinometer)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test chassis parsing:
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("chassis_inclination"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
-  ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("chassis")));
+  ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("chassis_inclination")));
 }
 
 TEST_F(TestTplStatus, PrismaticFrontFrameParser)
@@ -73,14 +76,14 @@ TEST_F(TestTplStatus, PrismaticFrontFrameParser)
   // Test setup:
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
-      .WillOnce(::testing::Return(
-          hal_tool_test::getPrismaticFrame(encoded_ejection_in_meters, hal_tool::encoder_can_id::tpl_prismatic_front)));
+      .WillOnce(::testing::Return(hal_tool_test::getPrismaticFrame(
+          encoded_ejection_in_meters, hal_tool::tpl_sensors_can_id::tpl_prismatic_encoder_front)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test prismatic parsing:
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_prismatic_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_extension_front"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
-  ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, *(tpl_state_test_->getEncoderValue("tpl_prismatic_front")));
+  ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, *(tpl_state_test_->getEncoderValue("tpl_extension_front")));
 }
 
 TEST_F(TestTplStatus, PrismaticBackFrameParser)
@@ -89,14 +92,14 @@ TEST_F(TestTplStatus, PrismaticBackFrameParser)
   // Test setup:
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
-      .WillOnce(::testing::Return(
-          hal_tool_test::getPrismaticFrame(encoded_ejection_in_meters, hal_tool::encoder_can_id::tpl_prismatic_back)));
+      .WillOnce(::testing::Return(hal_tool_test::getPrismaticFrame(
+          encoded_ejection_in_meters, hal_tool::tpl_sensors_can_id::tpl_prismatic_encoder_back)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test prismatic parsing:
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_prismatic_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_extension_back"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
-  ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, *(tpl_state_test_->getEncoderValue("tpl_prismatic_back")));
+  ASSERT_DOUBLE_EQ(encoded_ejection_in_meters, *(tpl_state_test_->getEncoderValue("tpl_extension_back")));
 }
 
 TEST_F(TestTplStatus, RevoluteFrontFrameParser)
@@ -107,13 +110,13 @@ TEST_F(TestTplStatus, RevoluteFrontFrameParser)
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
       .WillOnce(::testing::Return(
-          hal_tool_test::getRevoluteFrame(angle_degrees, hal_tool::encoder_can_id::tpl_revolute_front)));
+          hal_tool_test::getRevoluteFrame(angle_degrees, hal_tool::tpl_sensors_can_id::tpl_inclinometer_front)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_revolute_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_angle_front"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
-  ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("tpl_revolute_front")));
+  ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("tpl_angle_front")));
 }
 
 TEST_F(TestTplStatus, RevoluteBackFrameParser)
@@ -124,13 +127,13 @@ TEST_F(TestTplStatus, RevoluteBackFrameParser)
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
       .WillOnce(::testing::Return(
-          hal_tool_test::getRevoluteFrame(angle_degrees, hal_tool::encoder_can_id::tpl_revolute_back)));
+          hal_tool_test::getRevoluteFrame(angle_degrees, hal_tool::tpl_sensors_can_id::tpl_inclinometer_back)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_revolute_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_angle_back"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
-  ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("tpl_revolute_back")));
+  ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("tpl_angle_back")));
 }
 
 TEST_F(TestTplStatus, RgbPtoFrontFrameParser)
@@ -143,19 +146,19 @@ TEST_F(TestTplStatus, RgbPtoFrontFrameParser)
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
       .WillOnce(::testing::Return(
-          hal_tool_test::getRgbPtoFrame(pto, red, green, blue, hal_tool::encoder_can_id::flow_pto_front)));
+          hal_tool_test::getRgbPtoFrame(pto, red, green, blue, hal_tool::tpl_sensors_can_id::pto_and_qfc_flow_front)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
   ASSERT_EQ(tpl_state_test_->getEncoderValue("pto_flow_front"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_flow_front"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_flow_front"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_qfc_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_qfc_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_qfc_flow_front"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
   ASSERT_EQ(pto, *(tpl_state_test_->getEncoderValue("pto_flow_front")));
-  ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_flow_front")));
-  ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_flow_front")));
-  ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_flow_front")));
+  ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_qfc_flow_front")));
+  ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_qfc_flow_front")));
+  ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_qfc_flow_front")));
 }
 
 TEST_F(TestTplStatus, RgbPtoBackFrameParser)
@@ -168,19 +171,19 @@ TEST_F(TestTplStatus, RgbPtoBackFrameParser)
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
       .WillOnce(::testing::Return(
-          hal_tool_test::getRgbPtoFrame(pto, red, green, blue, hal_tool::encoder_can_id::flow_pto_back)));
+          hal_tool_test::getRgbPtoFrame(pto, red, green, blue, hal_tool::tpl_sensors_can_id::pto_and_qfc_flow_back)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
   ASSERT_EQ(tpl_state_test_->getEncoderValue("pto_flow_back"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_flow_back"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_flow_back"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_qfc_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_qfc_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_qfc_flow_back"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
   ASSERT_EQ(pto, *(tpl_state_test_->getEncoderValue("pto_flow_back")));
-  ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_flow_back")));
-  ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_flow_back")));
-  ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_flow_back")));
+  ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_qfc_flow_back")));
+  ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_qfc_flow_back")));
+  ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_qfc_flow_back")));
 }
 
 int main(int argc, char** argv)

@@ -4,21 +4,19 @@
 
 #pragma once
 
-#include <hal_tool/CanData/ICanData.h>
+#include <agribot_common/CanBus/ICanReceivedData.h>
 #include <vector>
 #include <cstdint>
 
 namespace hal_tool
 {
-class TplRevoluteEncoder : public ICanData
+class ChassisInclination : public ICanReceivedData<double>
 {
- private:
-  bool parsed_at_least_once_ = false;
-  double angle_radians_;
+  std::optional<double> chassis_angle_radians_;
   void setParsedValue(const double val) override;
 
  public:
-  void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
+  void assembleValueFromFrame(const CanFrame& can_frame) override;
   std::optional<double> getAssembledValue() const override;
   void resetParsedFlag() override;
 };

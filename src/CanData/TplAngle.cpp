@@ -1,0 +1,37 @@
+/*
+ * Copyright (C) 2021 Agribot. All rights reserved.
+ */
+
+#include <hal_tool/CanData/TplAngle.h>
+#include <agribot_common/CanBus/CanHelperFunctions.h>
+
+#include <cmath>
+#include <cstdint>
+
+namespace hal_tool
+{
+constexpr double degrees_to_radians = M_PI / 180;
+constexpr double encoder_resolution_degrees = 0.1;
+constexpr std::uint8_t pitch_lsb_location = 0;
+
+void TplAngle::setParsedValue(const double val)
+{
+  angle_radians_.emplace(val);
+}
+
+void TplAngle::assembleValueFromFrame(const CanFrame& can_frame)
+{
+  setParsedValue(static_cast<double>(CanHelperFunctions::getI16Lsbf(pitch_lsb_location, can_frame.getData())) *
+                 encoder_resolution_degrees * degrees_to_radians);
+}
+
+std::optional<double> TplAngle::getAssembledValue() const
+{
+  return angle_radians_;
+}
+
+void TplAngle::resetParsedFlag()
+{
+  angle_radians_.reset();
+}
+}  // namespace hal_tool

@@ -3,22 +3,20 @@
  */
 
 #pragma once
-
-#include <hal_tool/CanData/ICanData.h>
+#include <agribot_common/CanBus/ICanReceivedData.h>
 #include <vector>
 #include <cstdint>
 
 namespace hal_tool
 {
-class TplPrismaticEncoder : public ICanData
+class TplExtension : public ICanReceivedData<double>
 {
  private:
-  bool parsed_at_least_once_ = false;
-  double ejection_meters_;
+  std::optional<double> extension_meters_;
   void setParsedValue(const double val) override;
 
  public:
-  void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
+  void assembleValueFromFrame(const CanFrame& can_frame) override;
   std::optional<double> getAssembledValue() const override;
   void resetParsedFlag() override;
 };

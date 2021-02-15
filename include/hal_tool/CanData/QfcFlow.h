@@ -4,31 +4,31 @@
 
 #pragma once
 
-#include <hal_tool/CanData/ICanData.h>
+#include <agribot_common/CanBus/ICanReceivedData.h>
 #include <vector>
 #include <cstdint>
 
 namespace hal_tool
 {
-enum class flow_encoder : uint8_t
+enum class QfcFlowType : uint8_t
 {
   pto = 0,
-  red = 1,
-  green = 2,
-  blue = 3
+  red_qcf = 1,
+  green_qcf = 2,
+  blue_qcf = 3
 };
 
-class FlowEncoder : public ICanData
+class QfcFlow : public ICanReceivedData<double>
 {
   bool parsed_at_least_once_ = false;
-  double valve_open_percentage_;
-  flow_encoder encoder_type_;
+  std::optional<double> valve_open_percentage_;
+  QfcFlowType encoder_type_;
   void setParsedValue(const double val) override;
   uint8_t getDataBytePosition();
 
  public:
-  explicit FlowEncoder(flow_encoder selected_encoder);
-  void assembleValueFromFrame(const std::vector<uint8_t>& data) override;
+  explicit QfcFlow(QfcFlowType selected_encoder);
+  void assembleValueFromFrame(const CanFrame& can_frame) override;
   std::optional<double> getAssembledValue() const override;
   void resetParsedFlag() override;
 };
