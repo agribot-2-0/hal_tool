@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <agribot_common/CanBus/tests/CanMock.h>
+#include <agribot_common/CanBus/test/CanMock.h>
 #include <hal_tool/TplStatus/TplStatus.h>
 
 #include <gtest/gtest.h>
