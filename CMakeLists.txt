@@ -38,7 +38,7 @@ include_directories(
 
 link_directories("${PROJECT_SOURCE_DIR}")
 
-list(APPEND cpp_files src/TplStatus/TplStatus.cpp src/CanData/ChassisInclination.cpp src/CanData/QfcFlow.cpp)
+list(APPEND cpp_files src/TplStatus/TplStatus.cpp src/CanData/ChassisInclination.cpp src/CanData/QcfFlow.cpp)
 list(APPEND cpp_files src/CanData/TplExtension.cpp src/CanData/TplAngle.cpp)
 
 add_executable(hal_tpl_status_node src/TplStatusNode/hal_tpl_status_node.cpp src/TplStatusNode/TplStatusNode.cpp ${cpp_files})

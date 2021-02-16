@@ -4,13 +4,13 @@
 
 #include <hal_tool/CanData/TplAngle.h>
 #include <agribot_common/CanBus/CanHelperFunctions.h>
+#include <agribot_common/CommonFunctions/common_functions.h>
 
 #include <cmath>
 #include <cstdint>
 
 namespace hal_tool
 {
-constexpr double degrees_to_radians = M_PI / 180;
 constexpr double encoder_resolution_degrees = 0.1;
 constexpr std::uint8_t pitch_lsb_location = 0;
 
@@ -21,8 +21,9 @@ void TplAngle::setParsedValue(const double val)
 
 void TplAngle::assembleValueFromFrame(const CanFrame& can_frame)
 {
-  setParsedValue(static_cast<double>(CanHelperFunctions::getI16Lsbf(pitch_lsb_location, can_frame.getData())) *
-                 encoder_resolution_degrees * degrees_to_radians);
+  setParsedValue(common_functions::degreesToRadians(
+      static_cast<double>(CanHelperFunctions::getI16Lsbf(pitch_lsb_location, can_frame.getData())) *
+      encoder_resolution_degrees));
 }
 
 std::optional<double> TplAngle::getAssembledValue() const

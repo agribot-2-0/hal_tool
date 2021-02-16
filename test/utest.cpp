@@ -4,7 +4,7 @@
 
 #include <TestTplStatus.h>
 #include <hal_tool/CanData/ChassisInclination.h>
-#include <hal_tool/CanData/QfcFlow.h>
+#include <hal_tool/CanData/QcfFlow.h>
 #include <hal_tool/CanData/TplExtension.h>
 #include <hal_tool/CanData/TplAngle.h>
 
@@ -146,19 +146,19 @@ TEST_F(TestTplStatus, RgbPtoFrontFrameParser)
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
       .WillOnce(::testing::Return(
-          hal_tool_test::getRgbPtoFrame(pto, red, green, blue, hal_tool::tpl_sensors_can_id::pto_and_qfc_flow_front)));
+          hal_tool_test::getRgbPtoFrame(pto, red, green, blue, hal_tool::tpl_sensors_can_id::pto_and_qcf_flow_front)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
   ASSERT_EQ(tpl_state_test_->getEncoderValue("pto_flow_front"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_qfc_flow_front"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_qfc_flow_front"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_qfc_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_qcf_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_qcf_flow_front"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_qcf_flow_front"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
   ASSERT_EQ(pto, *(tpl_state_test_->getEncoderValue("pto_flow_front")));
-  ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_qfc_flow_front")));
-  ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_qfc_flow_front")));
-  ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_qfc_flow_front")));
+  ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_qcf_flow_front")));
+  ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_qcf_flow_front")));
+  ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_qcf_flow_front")));
 }
 
 TEST_F(TestTplStatus, RgbPtoBackFrameParser)
@@ -171,19 +171,19 @@ TEST_F(TestTplStatus, RgbPtoBackFrameParser)
   EXPECT_CALL(*can_test_, bReceiveFrame()).WillOnce(::testing::Return(true)).WillOnce(::testing::Return(false));
   EXPECT_CALL(*can_test_, getMostRecentCanFrame())
       .WillOnce(::testing::Return(
-          hal_tool_test::getRgbPtoFrame(pto, red, green, blue, hal_tool::tpl_sensors_can_id::pto_and_qfc_flow_back)));
+          hal_tool_test::getRgbPtoFrame(pto, red, green, blue, hal_tool::tpl_sensors_can_id::pto_and_qcf_flow_back)));
   tpl_state_test_ = std::make_unique<hal_tool::TplStatus>(std::move(can_test_));
 
   // Test revolute frame parsing:
   ASSERT_EQ(tpl_state_test_->getEncoderValue("pto_flow_back"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_qfc_flow_back"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_qfc_flow_back"), std::nullopt);
-  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_qfc_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("red_qcf_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("green_qcf_flow_back"), std::nullopt);
+  ASSERT_EQ(tpl_state_test_->getEncoderValue("blue_qcf_flow_back"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
   ASSERT_EQ(pto, *(tpl_state_test_->getEncoderValue("pto_flow_back")));
-  ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_qfc_flow_back")));
-  ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_qfc_flow_back")));
-  ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_qfc_flow_back")));
+  ASSERT_EQ(red, *(tpl_state_test_->getEncoderValue("red_qcf_flow_back")));
+  ASSERT_EQ(green, *(tpl_state_test_->getEncoderValue("green_qcf_flow_back")));
+  ASSERT_EQ(blue, *(tpl_state_test_->getEncoderValue("blue_qcf_flow_back")));
 }
 
 int main(int argc, char** argv)
