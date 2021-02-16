@@ -7,7 +7,8 @@
 
 namespace hal_tool
 {
-void TplStatus::registerTplSensorData(const std::string& encoder_name, std::unique_ptr<ICanReceivedData<double>> encoder)
+void TplStatus::registerTplSensorData(const std::string& encoder_name,
+                                      std::unique_ptr<ICanReceivedData<double>> encoder)
 {
   tpl_sensor_data_.insert({ encoder_name, std::move(encoder) });
 }

@@ -13,6 +13,7 @@
 #include <hal_tool/TplStatus/TplStatus.h>
 
 #include <memory>
+#include <string>
 
 class TplStatusNode
 {
