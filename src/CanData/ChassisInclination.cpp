@@ -20,7 +20,7 @@ void ChassisInclination::setParsedValue(const double val)
 
 void ChassisInclination::assembleValueFromFrame(const CanFrame& can_frame)
 {
-  setParsedValue(common_functions::degreesToRadians(
+  setParsedValue(common_functions::radians(
       static_cast<double>(CanHelperFunctions::getI32Lsbf(pitch_lsb_location, can_frame.getData())) *
       encoder_resolution_degrees));
 }
@@ -30,7 +30,7 @@ std::optional<double> ChassisInclination::getAssembledValue() const
   return chassis_angle_radians_;
 }
 
-void ChassisInclination::resetParsedFlag()
+void ChassisInclination::resetParsedValue()
 {
   chassis_angle_radians_.reset();
 }

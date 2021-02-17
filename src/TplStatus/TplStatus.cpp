@@ -66,11 +66,7 @@ void TplStatus::assembleEncodersValues(const CanFrame& can_frame)
 
 bool TplStatus::keyExists(const std::string& encoder_name)
 {
-  if (tpl_sensor_data_.find(encoder_name) != tpl_sensor_data_.end())
-  {
-    return true;
-  }
-  return false;
+  return (tpl_sensor_data_.find(encoder_name) != tpl_sensor_data_.end());
 }
 
 bool TplStatus::keyContainsSuffix(const std::string& key, const std::string& suffix)
@@ -119,7 +115,7 @@ void TplStatus::resetVisitedEncodersFlag(const std::string& suffix)
     (void)unused_object;  // cast to void in order to supress compilator error "unused variable"
     if (keyContainsSuffix(encoder_name, suffix))
     {
-      tpl_sensor_data_[encoder_name]->resetParsedFlag();
+      tpl_sensor_data_[encoder_name]->resetParsedValue();
     }
   }
 }

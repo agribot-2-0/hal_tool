@@ -28,7 +28,7 @@ std::optional<double> TplExtension::getAssembledValue() const
   return extension_meters_;
 }
 
-void TplExtension::resetParsedFlag()
+void TplExtension::resetParsedValue()
 {
   extension_meters_.reset();
 }

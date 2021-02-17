@@ -3,15 +3,24 @@
  */
 
 #include <hal_tool/TplStatusNode/TplStatusNode.h>
+#include <agribot_common/CommonFunctions/ros_common_functions.h>
 
 TplStatusNode::TplStatusNode(int argc, char** argv)
 {
-  std::string selected_can;
   ros::init(argc, argv, "hal_tpl_status_node");
+  std::string selected_can;
+  try
+  {
+    selected_can = ros_common_functions::getRosParam<std::string>("/hal_tool/can_bus_name");
+  }
+  catch (const std::string& ex)
+  {
+    ROS_ERROR_STREAM("[TPL_STATUS_NODE] " + ex);
+    throw ex;
+  }
   node_handler_ = std::make_unique<ros::NodeHandle>();
   tpl_status_front_pub_ = node_handler_->advertise<agribot_msgs::AgribotTool>("/agribot/encoder/tool/front", 1);
   tpl_status_back_pub_ = node_handler_->advertise<agribot_msgs::AgribotTool>("/agribot/encoder/tool/back", 1);
-  node_handler_->param<std::string>("/hal_tool/can_bus_name", selected_can, "can0");
   std::unique_ptr<ICan> handler = std::make_unique<Can>();
 
   handler->iInitialize(selected_can.c_str());

@@ -21,7 +21,7 @@ void TplAngle::setParsedValue(const double val)
 
 void TplAngle::assembleValueFromFrame(const CanFrame& can_frame)
 {
-  setParsedValue(common_functions::degreesToRadians(
+  setParsedValue(common_functions::radians(
       static_cast<double>(CanHelperFunctions::getI16Lsbf(pitch_lsb_location, can_frame.getData())) *
       encoder_resolution_degrees));
 }
@@ -31,7 +31,7 @@ std::optional<double> TplAngle::getAssembledValue() const
   return angle_radians_;
 }
 
-void TplAngle::resetParsedFlag()
+void TplAngle::resetParsedValue()
 {
   angle_radians_.reset();
 }

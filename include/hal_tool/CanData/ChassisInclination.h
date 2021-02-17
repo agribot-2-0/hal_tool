@@ -18,6 +18,6 @@ class ChassisInclination : public ICanReceivedData<double>
  public:
   void assembleValueFromFrame(const CanFrame& can_frame) override;
   std::optional<double> getAssembledValue() const override;
-  void resetParsedFlag() override;
+  void resetParsedValue() override;
 };
 }  // namespace hal_tool

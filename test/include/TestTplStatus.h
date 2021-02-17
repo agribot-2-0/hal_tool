@@ -23,7 +23,7 @@ constexpr std::uint32_t angle_const = 10;
 
 CanFrame getChassisFrame(double angle, uint32_t id)
 {
-  std::uint32_t angle_to_send = static_cast<int32_t>(angle * angle_const);
+  std::int32_t angle_to_send = static_cast<int32_t>(angle * angle_const);
   can_frame frame_tmp;
   CanFrame frame;
   frame_tmp.can_id = id;
@@ -51,7 +51,7 @@ CanFrame getPrismaticFrame(double ejection, uint32_t id)
 
 CanFrame getRevoluteFrame(double angle, uint32_t id)
 {
-  uint32_t angle_to_send = static_cast<int16_t>(angle * angle_const);
+  int16_t angle_to_send = static_cast<int16_t>(angle * angle_const);
   can_frame frame_tmp;
   CanFrame frame;
   frame_tmp.can_id = id;

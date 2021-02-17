@@ -38,7 +38,7 @@ std::optional<double> QcfFlow::getAssembledValue() const
   return valve_open_percentage_;
 }
 
-void QcfFlow::resetParsedFlag()
+void QcfFlow::resetParsedValue()
 {
   valve_open_percentage_.reset();
 }
