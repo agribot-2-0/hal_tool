@@ -16,7 +16,7 @@ TplStatusNode::TplStatusNode(int argc, char** argv)
   catch (const std::string& ex)
   {
     ROS_ERROR_STREAM("[TPL_STATUS_NODE] " + ex);
-    throw ex;
+    ros::shutdown();
   }
   node_handler_ = std::make_unique<ros::NodeHandle>();
   tpl_status_front_pub_ = node_handler_->advertise<agribot_msgs::AgribotTool>("/agribot/encoder/tool/front", 1);
