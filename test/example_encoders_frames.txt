@@ -1,0 +1,20 @@
+1. Chassis encoder
+can0  04FF6E19   [8]  08 00 00 00 02 00 00 00
+
+2. Prismatic encoder front
+can0  18FFFF7E   [8]  E3 00 00 00 00 00 00 FF
+
+3. Prismatic encoder back
+can0  18FFFF7F   [8]  29 02 00 00 00 00 00 FF
+
+4. Rotary encoder front
+can0  18FFAB7C   [8]  00 00 02 00 4D 00 04 00
+
+5. Rotary encoder back
+can0  18FFAB7D   [8]  C7 00 A4 00 50 00 04 04
+
+6. RGB PTO front
+can0 FFD464
+
+7. RGB PTO back
+can0 FFD564
