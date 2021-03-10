@@ -13,9 +13,9 @@ TplStatusNode::TplStatusNode(int argc, char** argv)
   {
     selected_can = ros_common_functions::getRosParam<std::string>("/hal_tool/can_bus_name");
   }
-  catch (const std::string& ex)
+  catch (const std::exception& ex)
   {
-    ROS_ERROR_STREAM("[TPL_STATUS_NODE] " + ex);
+    ROS_ERROR_STREAM("[TPL_STATUS_NODE] " << ex.what());
     ros::shutdown();
   }
   node_handler_ = std::make_unique<ros::NodeHandle>();
