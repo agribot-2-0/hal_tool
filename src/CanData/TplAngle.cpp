@@ -13,10 +13,12 @@ namespace hal_tool
 {
 constexpr double encoder_resolution_degrees = 0.1;
 constexpr std::uint8_t pitch_lsb_location = 0;
+// Inclinometer is mounted on agribot in such manner, that axis sign need to be inverted
+constexpr double invert_inclinometer_axis = -1.0;
 
 void TplAngle::setParsedValue(const double val)
 {
-  angle_radians_.emplace(-val);
+  angle_radians_.emplace(invert_inclinometer_axis * val);
 }
 
 void TplAngle::assembleValueFromFrame(const CanFrame& can_frame)

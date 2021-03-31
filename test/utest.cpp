@@ -129,7 +129,7 @@ TEST_F(TestTplStatus,
   // Test revolute frame parsing:
   ASSERT_EQ(tpl_state_test_->getEncoderValue("tpl_angle_front"), std::nullopt);
   tpl_state_test_->parseTplEncodersFrames();
-  ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("tpl_angle_front")));
+  ASSERT_DOUBLE_EQ(-angle_radians, *(tpl_state_test_->getEncoderValue("tpl_angle_front")));
 }
 
 TEST_F(TestTplStatus,
@@ -146,7 +146,7 @@ TEST_F(TestTplStatus,
 
   // Test revolute frame parsing:
   tpl_state_test_->parseTplEncodersFrames();
-  ASSERT_DOUBLE_EQ(angle_radians, *(tpl_state_test_->getEncoderValue("tpl_angle_back")));
+  ASSERT_DOUBLE_EQ(-angle_radians, *(tpl_state_test_->getEncoderValue("tpl_angle_back")));
 }
 
 TEST_F(TestTplStatus, RgbPtoFrontFrameParser__When_front_flows_frame_received__Parsed_flows_should_match_expected_flows)
