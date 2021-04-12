@@ -15,7 +15,7 @@ constexpr double encoder_resolution_degrees = 0.1;
 constexpr std::uint8_t pitch_lsb_location = 0;
 // Inclinometer is mounted on agribot in such manner, that axis sign need to be inverted
 
-double TplAngle::invertInclinometerAxis(double angle) const
+inline double TplAngle::invertInclinometerAxis(double angle) const
 {
   return -angle;
 }

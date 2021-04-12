@@ -21,7 +21,7 @@ constexpr std::uint32_t second_byte_mask = 0x0000FF00;
 constexpr std::uint32_t third_byte_mask = 0x00FF0000;
 constexpr std::uint32_t angle_const = 10;
 
-double invertInclinometerAxis(double angle)
+inline double invertInclinometerAxis(double angle)
 {
   return -angle;
 }
