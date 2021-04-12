@@ -21,7 +21,10 @@ constexpr std::uint32_t second_byte_mask = 0x0000FF00;
 constexpr std::uint32_t third_byte_mask = 0x00FF0000;
 constexpr std::uint32_t angle_const = 10;
 
-constexpr double invert_inclinometer_axis = -1.0;
+double invertInclinometerAxis(double angle)
+{
+  return -angle;
+}
 
 CanFrame getChassisFrame(double angle, uint32_t id)
 {

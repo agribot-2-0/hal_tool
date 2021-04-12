@@ -17,6 +17,7 @@ class TplAngle : public ICanReceivedData<double>
   void setParsedValue(const double val) override;
 
  public:
+  double invertInclinometerAxis(double angle) const;
   void assembleValueFromFrame(const CanFrame& can_frame) override;
   std::optional<double> getAssembledValue() const override;
   void resetParsedValue() override;
