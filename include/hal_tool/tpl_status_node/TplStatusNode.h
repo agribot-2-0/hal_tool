@@ -10,7 +10,7 @@
 
 #include <agribot_common/CanBus/ICan.h>
 #include <agribot_common/Can.h>
-#include <hal_tool/TplStatus/TplStatus.h>
+#include <hal_tool/tpl_status/TplStatus.h>
 
 #include <memory>
 #include <string>

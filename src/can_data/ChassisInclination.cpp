@@ -2,7 +2,7 @@
  * Copyright (C) 2021 Agribot. All rights reserved.
  */
 
-#include <hal_tool/CanData/ChassisInclination.h>
+#include <hal_tool/can_data/ChassisInclination.h>
 #include <agribot_common/CanBus/CanHelperFunctions.h>
 #include <agribot_common/CommonFunctions/common_functions.h>
 

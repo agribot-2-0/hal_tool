@@ -38,10 +38,10 @@ include_directories(
 
 link_directories("${PROJECT_SOURCE_DIR}")
 
-list(APPEND cpp_files src/TplStatus/TplStatus.cpp src/CanData/ChassisInclination.cpp src/CanData/QcfFlow.cpp)
-list(APPEND cpp_files src/CanData/TplExtension.cpp src/CanData/TplAngle.cpp)
+list(APPEND cpp_files src/tpl_status/TplStatus.cpp src/can_data/ChassisInclination.cpp src/can_data/QcfFlow.cpp)
+list(APPEND cpp_files src/can_data/TplExtension.cpp src/can_data/TplAngle.cpp)
 
-add_executable(hal_tpl_status_node src/TplStatusNode/hal_tpl_status_node.cpp src/TplStatusNode/TplStatusNode.cpp ${cpp_files})
+add_executable(hal_tpl_status_node src/tpl_status_node/hal_tpl_status_node.cpp src/tpl_status_node/TplStatusNode.cpp ${cpp_files})
 target_link_libraries(hal_tpl_status_node ${agribot_common_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(hal_tpl_status_node ${catkin_EXPORTED_TARGETS})
 

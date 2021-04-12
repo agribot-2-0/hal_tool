@@ -2,7 +2,7 @@
  * Copyright (C) 2021 Agribot. All rights reserved.
  */
 
-#include <hal_tool/TplStatusNode/TplStatusNode.h>
+#include <hal_tool/tpl_status_node/TplStatusNode.h>
 #include <agribot_common/CommonFunctions/ros_common_functions.h>
 
 TplStatusNode::TplStatusNode(int argc, char** argv)
