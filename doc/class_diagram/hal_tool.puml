@@ -1,0 +1,96 @@
+@startuml
+
+namespace hal_tool {
+    interface "ICanReceivedData"template <class T>"" as ICanReceivedData_t
+    {
+        - {abstract} setParsedValue(const T val) : void
+        + {abstract} assembleValueFromFrame(const CanFrame& can_frame) : void
+        + {abstract} getAssembledValue() const :std::optional<T>
+        + {abstract} resetParsedValue() : void
+    }
+
+    class QcfFlow
+    {
+        - valve_open_percentage_ : optional<double>
+        - encoder_type_ : QcfFlowType
+        - getDataBytePosition() : uint8_t
+    }
+
+    enum QcfFlowType
+    {
+        pto
+        red_qcf
+        green_qcf
+        blue_qcf
+    }
+
+    class ChassisInclination
+    {
+        - chassis_angle_radians_  : optional<double>
+    }
+
+
+    class TplAngle
+    {
+        - angle_radians_ : std::optional<double>
+        + invertInclinometerAxis(double angle) : double
+    }
+
+    class TplExtension
+    {
+        - extension_meters_ : std::optional<double>
+    }
+
+    interface ICan
+    {
+        + {abstract} iInitialize(const char* pchCanChannel) : int
+        + {abstract} bReceiveFrame() : bool
+        + {abstract} iSendFrame(can_frame* frame, bool extended_id = true) : int
+        + {abstract} getMostRecentCanFrame() : CanFrame
+    }
+
+    class Can
+    {
+        - _iFileDesc : int
+        - most_recent_can_frame_: CanFrame
+    }
+
+    class TplStatus
+    {
+        - can_handler_ : std::unique_ptr<ICan>
+        - tpl_sensor_data_ : std::unordered_map<std::string, std::unique_ptr<ICanReceivedData<double>>>
+        - assembleChassisInclination(const CanFrame& can_frame) : void
+        - assemblePtoAndQcfFlow(const CanFrame& can_frame, const std::string& suffix) : void
+        - assembleTplExtension(const CanFrame& can_frame, const std::string& suffix) : void
+        - assembleTplAngle(const CanFrame& can_frame, const std::string& suffix) : void
+        - registerTplSensorData(const std::string& encoder_name, std::unique_ptr<ICanReceivedData<double>> encoder) : void
+        + parseTplEncodersFrames() : void
+        + resetVisitedEncodersFlag(const std::string& suffix) :
+        + dataReadyToSend(const std::string& suffix) : bool
+    }
+
+    class TplStatusNode
+    {
+        - node_handler_ : std::unique_ptr<ros::NodeHandle>
+        - tpl_status_front_pub_ : ros::Publisher
+        - tpl_status_back_pub_ : ros::Publisher
+        - tpl_state_ : std::unique_ptr<hal_tool::TplStatus>
+        + sendStatusMsg(const std::string& suffix) : void
+    }
+
+    class QcfFlow implements ICanReceivedData_t
+    QcfFlow --* QcfFlowType
+    class ChassisInclination implements ICanReceivedData_t
+    class TplAngle implements ICanReceivedData_t
+    class TplExtension implements ICanReceivedData_t
+
+    class Can implements ICan
+    Can --* TplStatus
+    QcfFlow --* TplStatus
+    ChassisInclination --* TplStatus
+    TplAngle --* TplStatus
+    TplExtension --* TplStatus
+    TplStatus --* TplStatusNode
+}
+
+@enduml

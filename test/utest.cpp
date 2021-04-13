@@ -3,10 +3,10 @@
  */
 
 #include <TestTplStatus.h>
-#include <hal_tool/CanData/ChassisInclination.h>
-#include <hal_tool/CanData/QcfFlow.h>
-#include <hal_tool/CanData/TplExtension.h>
-#include <hal_tool/CanData/TplAngle.h>
+#include <hal_tool/can_data/ChassisInclination.h>
+#include <hal_tool/can_data/QcfFlow.h>
+#include <hal_tool/can_data/TplExtension.h>
+#include <hal_tool/can_data/TplAngle.h>
 #include <agribot_common/CommonFunctions/common_functions.h>
 
 #include <gtest/gtest.h>

@@ -2,7 +2,7 @@
  * Copyright (C) 2021 Agribot. All rights reserved.
  */
 
-#include <hal_tool/TplStatus/TplStatus.h>
+#include <hal_tool/tpl_status/TplStatus.h>
 #include <agribot_common/CanBus/CanHelperFunctions.h>
 
 namespace hal_tool
